@@ -50,4 +50,18 @@ Then, `initialize_infection(nbOfPeople)` randomly infects `nbOfPeople` number of
 
 Then, `launch_propagation` happens. I'm not sure I'm up to explain all of it.
 
-## - HowTo Simulate
+- Results: All the information of the simulation is stored in `self.statusByAgeGroup`. It is a `dict` with tracking on each of the `Person` states, divided in groups of age. So, for every simulation day, you have a new dictionnary within the dictionnary.
+
+## - How to Simulate
+
+Here is a code snippet:
+
+    import json
+    from VirusSimulator import VirusSimulator
+
+    with open("params.json") as f:
+      parametersFile = json.load(f)
+
+    COVID19 = VirusSimulator()
+    COVID19.simulate(80000, 60, parametersFile[0])
+    print(COVID19.statusByAgeGroup)
