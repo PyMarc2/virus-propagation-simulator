@@ -1,5 +1,6 @@
 import random
 import numpy as np
+import matplotlib.pyplot as plt
 import datetime
 
 
@@ -18,6 +19,19 @@ class VirusSimulator:
         self.initialize_infection(nbOfInfected=1)
         self.launch_propagation(time)
 
+    def plot_results(self, indicator):
+        fig, ax1 = plt.subplots(figsize=(4, 4))
+        xdata = range(len(self.statusByAgeGroup))
+
+        for ageKey in self.statusByAgeGroup[0].keys():
+            data2plot = []
+            for dayKey in self.statusByAgeGroup.keys():
+                data2plot.append(self.statusByAgeGroup[int(dayKey)][ageKey][indicator])
+            ax1.plot(xdata, data2plot, label=ageKey)
+
+        ax1.legend()
+        plt.show()
+
     def launch_propagation(self, nbOfDays):
 
         for d in range(nbOfDays):
@@ -31,6 +45,8 @@ class VirusSimulator:
             self.save_status(d)
             print('END DAVE STATUS')
             print('simulation day: {} on {} ({}%)'.format(d, nbOfDays, d * 100 / nbOfDays))
+            print(self.statusByAgeGroup)
+            self.plot_results('isInfected')
 
     def meet_people(self):
         print('BEGIN INDEXING :: {}'.format(self.day))
