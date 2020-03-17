@@ -9,8 +9,8 @@ A JSON file contains all the population information on every possible parameter.
 
 ## - Person class
 
-encapsulate all the following parameters:
-    
+A `Person`encapsulate all the following parameters:
+
     'knownEncounteredPerDay': 
     'unwantedEncounteredPerDay':
     'probabilityOfInfection'
@@ -37,3 +37,17 @@ and a `Person` encapsulates all the following states:
       self.hasSymptoms = 0
       self.isRecovered = 0
  
+Which are changed and monitored throughout the simulation for each individual.
+
+## - VirusSimulator class
+
+Each function does complex things. The important function to use si the `simulate` function.
+`simulate(nbOfPeople, amountOfTime, parametersOfPopulation)`. Those are the 3 parameters to launch a simulation. The other parameters to be changed are in the .json. 
+
+This simulation will start by creating the population. `create_population`. This give random gaussian parameters and creates X number of individuals all stored in a list. You end up with a `list` of `Person` objects.
+
+Then, `initialize_infection(nbOfPeople)` randomly infects `nbOfPeople` number of people.
+
+Then, `launch_propagation` happens. I'm not sure I'm up to explain all of it.
+
+## - HowTo Simulate
