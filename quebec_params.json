@@ -1,0 +1,355 @@
+[
+  {
+    "[0-9]": {
+      "percentageOfPopulation": 0.11,
+      "knownEncounteredPerDay": {
+        "mean": 10,
+        "sd": 5
+      },
+      "unwantedEncounteredPerDay": {
+        "mean": 10,
+        "sd": 10
+      },
+      "probabilityOfInfection": {
+        "mean": 0.04,
+        "sd": 0.02
+      },
+      "timeBeforeInfectious": {
+        "mean": 3,
+        "sd": 1
+      },
+      "timeOfIncubation": {
+        "mean": 6,
+        "sd": 4
+      },
+      "timeOfPeakSymptoms": {
+        "mean": 10,
+        "sd": 3
+      },
+      "timeOfRecuperation": {
+        "mean": 15,
+        "sd": 5
+      },
+      "timeBeforeNonInfectious": {
+        "mean": 18,
+        "sd": 4
+      },
+      "probabilityOfDying": {
+        "mean": 0.01,
+        "sd": 0.01
+      }
+    },
+    "[10-19]": {
+      "percentageOfPopulation": 0.1,
+      "knownEncounteredPerDay": {
+        "mean": 10,
+        "sd": 5
+      },
+      "unwantedEncounteredPerDay": {
+        "mean": 10,
+        "sd": 10
+      },
+      "probabilityOfInfection": {
+        "mean": 0.04,
+        "sd": 0.02
+      },
+      "timeBeforeInfectious": {
+        "mean": 3,
+        "sd": 1
+      },
+      "timeOfIncubation": {
+        "mean": 6,
+        "sd": 4
+      },
+      "timeOfPeakSymptoms": {
+        "mean": 10,
+        "sd": 3
+      },
+      "timeOfRecuperation": {
+        "mean": 15,
+        "sd": 5
+      },
+      "timeBeforeNonInfectious": {
+        "mean": 18,
+        "sd": 4
+      },
+      "probabilityOfDying": {
+        "mean": 0.01,
+        "sd": 0.01
+      }
+    },
+    "[20-29]": {
+      "percentageOfPopulation": 0.13,
+      "knownEncounteredPerDay": {
+        "mean": 10,
+        "sd": 5
+      },
+      "unwantedEncounteredPerDay": {
+        "mean": 10,
+        "sd": 10
+      },
+      "probabilityOfInfection": {
+        "mean": 0.04,
+        "sd": 0.02
+      },
+      "timeBeforeInfectious": {
+        "mean": 3,
+        "sd": 1
+      },
+      "timeOfIncubation": {
+        "mean": 6,
+        "sd": 4
+      },
+      "timeOfPeakSymptoms": {
+        "mean": 10,
+        "sd": 3
+      },
+      "timeOfRecuperation": {
+        "mean": 15,
+        "sd": 5
+      },
+      "timeBeforeNonInfectious": {
+        "mean": 18,
+        "sd": 4
+      },
+      "probabilityOfDying": {
+        "mean": 0.01,
+        "sd": 0.01
+      }
+    },
+    "[30-39]": {
+      "percentageOfPopulation": 0.13,
+      "knownEncounteredPerDay": {
+        "mean": 10,
+        "sd": 5
+      },
+      "unwantedEncounteredPerDay": {
+        "mean": 10,
+        "sd": 10
+      },
+      "probabilityOfInfection": {
+        "mean": 0.04,
+        "sd": 0.02
+      },
+      "timeBeforeInfectious": {
+        "mean": 3,
+        "sd": 1
+      },
+      "timeOfIncubation": {
+        "mean": 6,
+        "sd": 4
+      },
+      "timeOfPeakSymptoms": {
+        "mean": 10,
+        "sd": 3
+      },
+      "timeOfRecuperation": {
+        "mean": 15,
+        "sd": 5
+      },
+      "timeBeforeNonInfectious": {
+        "mean": 18,
+        "sd": 4
+      },
+      "probabilityOfDying": {
+        "mean": 0.01,
+        "sd": 0.01
+      }
+    },
+    "[40-49]": {
+      "percentageOfPopulation": 0.13,
+     "knownEncounteredPerDay": {
+        "mean": 10,
+        "sd": 5
+      },
+      "unwantedEncounteredPerDay": {
+        "mean": 10,
+        "sd": 10
+      },
+      "probabilityOfInfection": {
+        "mean": 0.04,
+        "sd": 0.02
+      },
+      "timeBeforeInfectious": {
+        "mean": 3,
+        "sd": 1
+      },
+      "timeOfIncubation": {
+        "mean": 6,
+        "sd": 4
+      },
+      "timeOfPeakSymptoms": {
+        "mean": 10,
+        "sd": 3
+      },
+      "timeOfRecuperation": {
+        "mean": 15,
+        "sd": 5
+      },
+      "timeBeforeNonInfectious": {
+        "mean": 18,
+        "sd": 4
+      },
+      "probabilityOfDying": {
+        "mean": 0.01,
+        "sd": 0.01
+      }
+    },
+    "[50-59]": {
+      "percentageOfPopulation": 0.14,
+      "knownEncounteredPerDay": {
+        "mean": 10,
+        "sd": 5
+      },
+      "unwantedEncounteredPerDay": {
+        "mean": 10,
+        "sd": 10
+      },
+      "probabilityOfInfection": {
+        "mean": 0.04,
+        "sd": 0.02
+      },
+      "timeBeforeInfectious": {
+        "mean": 3,
+        "sd": 1
+      },
+      "timeOfIncubation": {
+        "mean": 6,
+        "sd": 4
+      },
+      "timeOfPeakSymptoms": {
+        "mean": 10,
+        "sd": 3
+      },
+      "timeOfRecuperation": {
+        "mean": 15,
+        "sd": 5
+      },
+      "timeBeforeNonInfectious": {
+        "mean": 18,
+        "sd": 4
+      },
+      "probabilityOfDying": {
+        "mean": 0.01,
+        "sd": 0.01
+      }
+    },
+    "[60-69]": {
+      "percentageOfPopulation": 0.13,
+      "knownEncounteredPerDay": {
+        "mean": 10,
+        "sd": 5
+      },
+      "unwantedEncounteredPerDay": {
+        "mean": 10,
+        "sd": 10
+      },
+      "probabilityOfInfection": {
+        "mean": 0.04,
+        "sd": 0.02
+      },
+      "timeBeforeInfectious": {
+        "mean": 3,
+        "sd": 1
+      },
+      "timeOfIncubation": {
+        "mean": 6,
+        "sd": 4
+      },
+      "timeOfPeakSymptoms": {
+        "mean": 10,
+        "sd": 3
+      },
+      "timeOfRecuperation": {
+        "mean": 15,
+        "sd": 5
+      },
+      "timeBeforeNonInfectious": {
+        "mean": 18,
+        "sd": 4
+      },
+      "probabilityOfDying": {
+        "mean": 0.01,
+        "sd": 0.01
+      }
+    },
+    "[70-79]": {
+      "percentageOfPopulation": 0.09,
+      "knownEncounteredPerDay": {
+        "mean": 10,
+        "sd": 5
+      },
+      "unwantedEncounteredPerDay": {
+        "mean": 10,
+        "sd": 10
+      },
+      "probabilityOfInfection": {
+        "mean": 0.04,
+        "sd": 0.02
+      },
+      "timeBeforeInfectious": {
+        "mean": 3,
+        "sd": 1
+      },
+      "timeOfIncubation": {
+        "mean": 6,
+        "sd": 4
+      },
+      "timeOfPeakSymptoms": {
+        "mean": 10,
+        "sd": 3
+      },
+      "timeOfRecuperation": {
+        "mean": 15,
+        "sd": 5
+      },
+      "timeBeforeNonInfectious": {
+        "mean": 18,
+        "sd": 4
+      },
+      "probabilityOfDying": {
+        "mean": 0.01,
+        "sd": 0.01
+      }
+    },
+    "[80-100]": {
+      "percentageOfPopulation": 0.05,
+      "knownEncounteredPerDay": {
+        "mean": 10,
+        "sd": 5
+      },
+      "unwantedEncounteredPerDay": {
+        "mean": 10,
+        "sd": 10
+      },
+      "probabilityOfInfection": {
+        "mean": 0.04,
+        "sd": 0.02
+      },
+      "timeBeforeInfectious": {
+        "mean": 3,
+        "sd": 1
+      },
+      "timeOfIncubation": {
+        "mean": 6,
+        "sd": 4
+      },
+      "timeOfPeakSymptoms": {
+        "mean": 10,
+        "sd": 3
+      },
+      "timeOfRecuperation": {
+        "mean": 15,
+        "sd": 5
+      },
+      "timeBeforeNonInfectious": {
+        "mean": 18,
+        "sd": 4
+      },
+      "probabilityOfDying": {
+        "mean": 0.01,
+        "sd": 0.01
+      }
+    }
+  }
+]
