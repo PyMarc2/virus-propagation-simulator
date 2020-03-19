@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+
 import json
 from VirusSimulator import VirusSimulator
 
