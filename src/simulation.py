@@ -1,8 +1,8 @@
 
 import json
-from VirusSimulator import VirusSimulator
+from src.VirusSimulator import VirusSimulator
 
-with open("quebec_params.json") as f:
+with open("parameters_preset/quebec_params.json") as f:
   parameters_quebec = json.load(f)
 
 COVID19 = VirusSimulator()
