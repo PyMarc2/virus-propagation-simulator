@@ -85,9 +85,9 @@ Here is a code snippet:
     ax1.legend()
     plt.show()
 
-![Farmers Market Finder Demo](demo/demo.gif)
 
 ## Next to implement
+- Add all parameter modifications on the GUI
 ![Demo GUI](doc/explication_1.gif)
 
 **All the following parameters should follow a gaussain curve**
