@@ -10,13 +10,12 @@ __status__ = "Production"
 from PyQt5.QtWidgets import QApplication, QSplashScreen
 from PyQt5.QtCore import Qt, QTimer, QSize
 from PyQt5.QtGui import QPixmap, QPainter, QMovie, QIcon
-from gui.windows import MainWindow
+from gui.windows.mainWindow import MainWindow
+from mainModel import MainModel
+from VirusSimulator import VirusSimulator
 from tools.threadWorker import Worker
-from tools.UiCustomizationLib import LoadingDotsWidget, LoadingDotsSplash
 import sys
-import time
 import ctypes
-import threading
 import logging
 import logging.config
 from logging.handlers import RotatingFileHandler
@@ -34,41 +33,12 @@ class App(QApplication):
 
         self.setAttribute(Qt.AA_EnableHighDpiScaling)
         self.setStyle("Fusion")
-        self.setStyleSheet('''
-    
-    font:75 12pt "Helvetica";
-    
-    
-    QWidget {
-    background-color: #EFF6EE;
-    color: #191712;
-    font:75 10pt "ABBvoice";
-    border-color: #ff0011;
-}
-
-QHeaderView::section {
-    background-color: #233043;
-    color: #EFF6EE;
-    padding: 4px;
-    border: 1px solid #fffff8;
-    font-size: 14pt;
-    font: 75 10pt "ABBvoice";
-}
-
-QTableWidget {
-    gridline-color: #fffff8;
-    font-size: 12pt;
-}
-
-QTableWidget QTableCornerButton::section {
-    background-color: #646464;
-    border: 1px solid #fffff8;
-}
-
-''')
         self.setStyleSheet("")
 
-        self.mainWindow = MainWindow()
+        self.mainModel = MainModel()
+        simulator = VirusSimulator()
+        self.mainModel.simulatorObject = simulator
+        self.mainWindow = MainWindow(model = self.mainModel)
         self.mainWindow.setWindowTitle("py-virus-propagation-simulator")
         self.mainWindow.show()
 

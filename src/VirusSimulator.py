@@ -1,11 +1,15 @@
 import random
 import numpy as np
 import matplotlib.pyplot as plt
+from PyQt5.QtCore import pyqtSignal, QObject
 import datetime
 
 
-class VirusSimulator:
+class VirusSimulator(QObject):
+    s_data_changed = pyqtSignal(list)
+    
     def __init__(self):
+        super(VirusSimulator, self).__init__()
         self.timeNow = 0
         self.timePast = 0
         self.day = 0
@@ -32,6 +36,15 @@ class VirusSimulator:
         ax1.legend()
         plt.show()
 
+    def send_results(self, indicator):
+        xdata = range(len(self.statusByAgeGroup))
+
+        for ageKey in self.statusByAgeGroup[0].keys():
+            data2plot = []
+            for dayKey in self.statusByAgeGroup.keys():
+                data2plot.append(self.statusByAgeGroup[int(dayKey)][ageKey][indicator])
+            self.s_data_changed.emit(data2plot)
+
     def launch_propagation(self, nbOfDays):
 
         for d in range(nbOfDays):
@@ -46,7 +59,7 @@ class VirusSimulator:
             print('END DAVE STATUS')
             print('simulation day: {} on {} ({}%)'.format(d, nbOfDays, d * 100 / nbOfDays))
             print(self.statusByAgeGroup)
-            self.plot_results('isInfected')
+            #self.plot_results('isInfected')
 
     def meet_people(self):
         print('BEGIN INDEXING :: {}'.format(self.day))
