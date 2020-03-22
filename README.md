@@ -5,6 +5,8 @@ Instead of looking at the brownian simulation that everyone is so optimistic abo
 
 For now, the parameter file is filled with proportion of the Quebec's population age according to last 2019 surveys.
 
+# NEW IN VERSION 0.2
+- Implementation in a live graphGUI!
 
 ## JSON population's parameters file
 A JSON file contains all the population information on every possible parameter. View the .json in the project to understand. Each parameter has a _mean_ and a _standard deviation_ from which we will later distribute randomly those parameters according to a gaussian curve with the same _mean_ and _sd_.
@@ -83,7 +85,10 @@ Here is a code snippet:
     ax1.legend()
     plt.show()
 
+![Farmers Market Finder Demo](demo/demo.gif)
+
 ## Next to implement
+![Demo GUI](doc/explication_1.gif)
 
 **All the following parameters should follow a gaussain curve**
 
