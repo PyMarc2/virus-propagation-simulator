@@ -21,7 +21,7 @@ class SimulationView(QWidget, Ui_simulationView):
         self.connect_buttons()
         self.connect_signals()
         self.plotItem = self.graphWidget.getPlotItem()
-
+        self.plotDataItem = self.plotItem.plot()
     def connect_buttons(self):
         self.pb_simulate.clicked.connect(self.launch_simulation)
         log.info("Connecting simulationView GUI...")
@@ -32,10 +32,11 @@ class SimulationView(QWidget, Ui_simulationView):
 
     @pyqtSlot(list)
     def graph_update(self, value):
-        self.plotItem.clear()
         #unfoldedData = self.unfold_plot_data(value)
-        #log.info("Plot updated")
-        self.plotItem.plot(value[0], value[1][0])
+        log.info("Plot updated")
+        kwargs = {'x':value[0], 'y':value[1][0]}
+        self.plotDataItem.setData(**kwargs)
+
 
 
 
