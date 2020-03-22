@@ -20,6 +20,7 @@ class SimulationView(QWidget, Ui_simulationView):
         self.setupUi(self)
         self.connect_buttons()
         self.connect_signals()
+        self.plotItem = self.graphWidget.getPlotItem()
 
     def connect_buttons(self):
         self.pb_simulate.clicked.connect(self.launch_simulation)
@@ -31,12 +32,10 @@ class SimulationView(QWidget, Ui_simulationView):
 
     @pyqtSlot(list)
     def graph_update(self, value):
-        unfoldedData = self.unfold_plot_data(value)
-        self.plotItem = self.graphWidget.getPlotItem()
-        log.info("Plot updated")
-        for data in unfoldedData:
-            print(data)
-            self.plotItem.plot(data[0], data[1])
+        self.plotItem.clear()
+        #unfoldedData = self.unfold_plot_data(value)
+        #log.info("Plot updated")
+        self.plotItem.plot(value[0], value[1][0])
 
 
 
@@ -68,6 +67,3 @@ class SimulationView(QWidget, Ui_simulationView):
         self.simulationWorker.moveToThread(self.simulationThread)
         self.simulationThread.started.connect(self.simulationWorker.run)
         self.simulationThread.start()
-
-
-

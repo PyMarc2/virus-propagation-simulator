@@ -39,6 +39,7 @@ class App(QApplication):
         self.mainWindow = MainWindow(model=self.mainModel)
         self.mainWindow.setWindowTitle("py-virus-propagation-simulator")
         self.mainWindow.show()
+        log.info("This is the MAIN THREAD")
 
     @staticmethod
     def init_logging():
