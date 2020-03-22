@@ -43,7 +43,7 @@
    <item row="1" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Last Update: 19/03/2020</string>
+      <string>Last Update: 21/03/2020</string>
      </property>
     </widget>
    </item>

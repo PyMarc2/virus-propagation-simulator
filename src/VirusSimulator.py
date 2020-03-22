@@ -1,8 +1,12 @@
 import random
 import numpy as np
 import matplotlib.pyplot as plt
+import json
 from PyQt5.QtCore import pyqtSignal, QObject
 import datetime
+import logging
+
+log = logging.getLogger(__name__)
 
 
 class VirusSimulator(QObject):
@@ -13,10 +17,16 @@ class VirusSimulator(QObject):
         self.timeNow = 0
         self.timePast = 0
         self.day = 0
+        self.selectedIndicators = []
         self.population = []
         self.parameters = {}
         self.statusByAgeGroup = {}
         self.healthcareSystemLimit = 50000
+
+    def simulate_from_gui(self, *args, **kwargs):
+        self.create_population(args[0])
+        self.initialize_infection(nbOfInfected=args[1])
+        self.launch_propagation(args[2])
 
     def simulate(self, amount, time, parameters):
         self.create_population(amount, parameters)
@@ -36,6 +46,20 @@ class VirusSimulator(QObject):
         ax1.legend()
         plt.show()
 
+    def send_data_to_plot(self, indicators=None):
+        if indicators is not None:
+            self.selectedIndicators = indicators
+
+        xdata = list(range(len(self.statusByAgeGroup)))
+
+        for ageKey in self.statusByAgeGroup[0].keys():
+            data2plot = []
+            for j, indicator in enumerate(self.selectedIndicators):
+                data2plot.append([])
+                for dayKey in self.statusByAgeGroup.keys():
+                    data2plot[j].append(self.statusByAgeGroup[int(dayKey)][ageKey][indicator])
+                self.s_data_changed.emit([xdata, data2plot])
+
     def send_results(self, indicator):
         xdata = range(len(self.statusByAgeGroup))
 
@@ -49,32 +73,36 @@ class VirusSimulator(QObject):
 
         for d in range(nbOfDays):
             self.day = d
+            log.info('Simulation Day: {} on {} ({}%)'.format(d, nbOfDays-1, d * 100 / nbOfDays-1))
             self.statusByAgeGroup[d] = {}
             for group in self.parameters.keys():
                 self.statusByAgeGroup[d][group] = {}
 
             self.meet_people()
-            print('BEGIN SAVE STATUS')
+            log.info('DAY {} :: BEGIN SAVE STATUS'.format(d))
             self.save_status(d)
-            print('END DAVE STATUS')
-            print('simulation day: {} on {} ({}%)'.format(d, nbOfDays, d * 100 / nbOfDays))
-            print(self.statusByAgeGroup)
-            #self.plot_results('isInfected')
+            log.info('DAY {} :: END SAVE STATUS'.format(d))
+
+            #print(self.statusByAgeGroup)
+            self.send_data_to_plot()
+
+
+        log.info('=== === === SIMULATION COMPLETE === === ===')
 
     def meet_people(self):
-        print('BEGIN INDEXING :: {}'.format(self.day))
+        log.info('DAY {} :: BEGIN INDEXING'.format(self.day))
         personListIndex = [i if x.isInfected == 1 else -1 for i, x in enumerate(self.population)]
         personListIndex = list(filter((-1).__ne__, personListIndex))
-        print('END INDEXING :: {}'.format(self.day))
+        log.info('DAY {} :: END INDEXING'.format(self.day))
 
-        print('BEGIN MEETING PERSONS :: {}'.format(self.day))
+        log.info('DAY {} :: BEGIN MEETING PERSONS'.format(self.day))
         liste = [self.population[i] for i in personListIndex]
         for person in liste:
             person.update_own_status()
             if person.isInfectious:
                 for metPerson in range(int(person.parameters['knownEncounteredPerDay'])):
                     person.interact(random.choice(person.listOfRelatives))
-        print('END MEETING PERSONS :: {}'.format(self.day))
+        log.info('DAY {} :: END MEETING PERSONS'.format(self.day))
 
     def save_status(self, d):
         for key in self.statusByAgeGroup[d].keys():
@@ -92,19 +120,24 @@ class VirusSimulator(QObject):
                 sum(p.isRecovered == 1 and p.tag == key for p in self.population))
 
     def initialize_infection(self, nbOfInfected=1):
-        indexes = random.choices(range(len(self.population)), k=nbOfInfected)
-        for index in indexes:
-            self.population[index].isInfected = 1
+        try:
+            indexes = random.choices(range(len(self.population)), k=nbOfInfected)
+            for index in indexes:
+                self.population[index].isInfected = 1
+        except Exception as e:
+            log.error(e)
 
-    def create_population(self, amountOfPeople, parameters):
-        self.parameters = parameters
+    def create_population(self, amountOfPeople, parameters=None):
+        if parameters is not None:
+            self.parameters = parameters
+
         id = 0
-        for i, key in enumerate(parameters.keys()):
-            for j in range(int(amountOfPeople * parameters[key]['percentageOfPopulation'])):
-                randomizedParameters = self.give_gaussian_parameters(parameters[key])
+        for i, key in enumerate(self.parameters.keys()):
+            for j in range(int(amountOfPeople * self.parameters[key]['percentageOfPopulation'])):
+                randomizedParameters = self.give_gaussian_parameters(self.parameters[key])
                 self.population.append(Person(randomizedParameters, tag=key, id=id))
                 id += 1
-            print('creating population...{}/{}'.format(i, len(parameters.keys())))
+            print('creating population...{}/{}'.format(i, len(self.parameters.keys())))
         random.shuffle(self.population)
         print('population Created')
         print('selecting mates...')
@@ -112,6 +145,12 @@ class VirusSimulator(QObject):
             person.select_relatives(self.population)
         print('mates selected')
         return self.population
+
+    def load_json_parameters(self, jsonFilePath):
+        with open(jsonFilePath) as f:
+            parametersFile = json.load(f)
+        self.parameters = parametersFile[0]
+        return self.parameters
 
     @staticmethod
     def give_gaussian_parameters(parameters):

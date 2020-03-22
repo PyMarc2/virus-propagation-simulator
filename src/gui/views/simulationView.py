@@ -19,9 +19,34 @@ class SimulationView(QWidget, Ui_simulationView):
         self.model = model
         self.setupUi(self)
         self.connect_buttons()
+        self.connect_signals()
 
     def connect_buttons(self):
         self.pb_simulate.clicked.connect(self.launch_simulation)
+        log.info("Connecting simulationView GUI...")
+
+    def connect_signals(self):
+        log.info("Connecting simulationView Signals...")
+        self.model.simulatorObject.s_data_changed.connect(self.graph_update)
+
+    @pyqtSlot(list)
+    def graph_update(self, value):
+        unfoldedData = self.unfold_plot_data(value)
+        self.plotItem = self.graphWidget.getPlotItem()
+        log.info("Plot updated")
+        for data in unfoldedData:
+            print(data)
+            self.plotItem.plot(data[0], data[1])
+
+
+
+    def unfold_plot_data(self, foldedData):
+        unfoldedData = []
+        xdata = foldedData[0]
+        for ydata in foldedData[1]:
+            unfoldedData.append([xdata, ydata])
+        return unfoldedData
+
 
     def load_simulation_parameters(self):
         pass
@@ -33,7 +58,12 @@ class SimulationView(QWidget, Ui_simulationView):
         pass
 
     def launch_simulation(self):
-        self.simulationWorker = Worker(self.model.simulatorObject.simulate)
+        args = [self.model.populationSize, self.model.initialInfected, self.model.simulationTime]
+        log.info("Population Size:{}".format(self.model.populationSize))
+        log.info("Population: {}".format(self.model.simulatorObject.population))
+        log.info("Parameters: {}".format(self.model.simulatorObject.parameters))
+        log.info("Initially Infected: {}".format(self.model.initialInfected))
+        self.simulationWorker = Worker(self.model.simulatorObject.simulate_from_gui, *args)
         self.simulationThread = QThread()
         self.simulationWorker.moveToThread(self.simulationThread)
         self.simulationThread.started.connect(self.simulationWorker.run)

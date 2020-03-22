@@ -49,17 +49,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.paramsView = ParamsView(model=self.model)
         self.simulationView = SimulationView(model=self.model)
 
-    def graph_update(self, value):
-        self.graphWidget.plot(value)
-
     def connect_buttons(self):
         self.helpAction.triggered.connect(self.show_helpDialog)
 
     def connect_signals(self):
         self.helpDialog.s_windowClose.connect(lambda: self.setEnabled(True))
-        self.model.simulatorObject.s_data_changed.connect(self.graph_update)
 
     def show_helpDialog(self):
-        print('Hola')
+        log.info('Help Dialog Opened')
         self.setEnabled(False)
         self.helpDialog.exec_()

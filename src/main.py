@@ -36,9 +36,7 @@ class App(QApplication):
         self.setStyleSheet("")
 
         self.mainModel = MainModel()
-        simulator = VirusSimulator()
-        self.mainModel.simulatorObject = simulator
-        self.mainWindow = MainWindow(model = self.mainModel)
+        self.mainWindow = MainWindow(model=self.mainModel)
         self.mainWindow.setWindowTitle("py-virus-propagation-simulator")
         self.mainWindow.show()
 
@@ -55,8 +53,9 @@ class App(QApplication):
         logger.addHandler(handler)
 
         # create debug file handler in working directory
-        handler = RotatingFileHandler(os.path.join(os.getcwd(), "SAP-FormLink.log"), maxBytes=2.3 * 1024 * 1024, backupCount=5)
-        handler.setLevel(logging.NOTSET)
+        paramsViewUiPath = os.path.dirname(os.path.realpath(__file__)) + '\\paramsViewUi.ui'
+        handler = RotatingFileHandler(os.path.dirname(os.path.realpath(__file__)) + "\\log\\virus-propagation-simulator.log", maxBytes=2.3 * 1024 * 1024, backupCount=5)
+        handler.setLevel(logging.WARNING)
         formatter = logging.Formatter("%(asctime)s\t\t (%(name)-25.25s) (thread:%(thread)d) (line:%(lineno)5d)\t\t[%(levelname)-5.5s] %(message)s")
         handler.setFormatter(formatter)
         logger.addHandler(handler)
