@@ -91,8 +91,23 @@ Here is a code snippet:
     plt.show()
 
 
-## Next to implement
+## Next to implement (15/03/2020)
+- ~~Add GUI plots live update~~
+- ~~modifiy the VIrusSimulator base class for easier understanding
+- ~~Remove the use of a dispatcher
+- ~~Ability to separate plots
+- Ability to separate Age in plots
+- Ability to join plots
+- Ability to change graphing style
 - Add all parameter modifications on the GUI
+
+(28/02/2020)
+- Ability to change parameters and choose distribution type
+- Ability to see the distribution for easier understanding
+- Ability to change the simulation aprameters from within the simulation view
+- Ability to Stop the simulation without crash... correclty deleting the objects
+- Ability to resume the simulation
+- Ability to Reset the simulation to 0
 
 
 **All the following parameters should follow a gaussain curve**
