@@ -312,7 +312,46 @@
         "sd": 0.01
       }
     },
-    "[80-100]": {
+    "[80-89]": {
+      "percentageOfPopulation": 0.05,
+      "knownEncounteredPerDay": {
+        "mean": 10,
+        "sd": 5
+      },
+      "unwantedEncounteredPerDay": {
+        "mean": 10,
+        "sd": 10
+      },
+      "probabilityOfInfection": {
+        "mean": 0.04,
+        "sd": 0.02
+      },
+      "timeBeforeInfectious": {
+        "mean": 3,
+        "sd": 1
+      },
+      "timeOfIncubation": {
+        "mean": 6,
+        "sd": 4
+      },
+      "timeOfPeakSymptoms": {
+        "mean": 10,
+        "sd": 3
+      },
+      "timeOfRecuperation": {
+        "mean": 15,
+        "sd": 5
+      },
+      "timeBeforeNonInfectious": {
+        "mean": 18,
+        "sd": 4
+      },
+      "probabilityOfDying": {
+        "mean": 0.01,
+        "sd": 0.01
+      }
+    },
+    "[90-99]": {
       "percentageOfPopulation": 0.05,
       "knownEncounteredPerDay": {
         "mean": 10,
