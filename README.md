@@ -5,6 +5,10 @@ Instead of looking at the brownian simulation that everyone is so optimistic abo
 
 For now, the parameter file is filled with proportion of the Quebec's population age according to last 2019 surveys.
 
+# NEW IN VERSION 0.3
+- Simulator is now at version 0.3.
+- README will be updated soon.
+
 # NEW IN VERSION 0.2
 - Implementation in a live graphGUI! (But no parameter can be changed yet)
 ![Demo GUI](doc/explication_1.gif)
