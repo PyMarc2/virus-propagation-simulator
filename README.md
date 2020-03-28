@@ -94,8 +94,8 @@ Here is a code snippet:
 ## Next to implement (15/03/2020)
 - ~~Add GUI plots live update~~
 - ~~modifiy the VIrusSimulator base class for easier understanding
-- ~~Remove the use of a dispatcher
-- ~~Ability to separate plots
+- ~~Remove the use of a dispatcher~~
+- ~~Ability to separate plots~~
 - Ability to separate Age in plots
 - Ability to join plots
 - Ability to change graphing style
