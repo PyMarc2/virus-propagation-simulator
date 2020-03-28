@@ -54,6 +54,7 @@ class SimulationView(QWidget, Ui_simulationView):
         for indicator in Person().indicators:
             dataPlotItem = self.allPlotsDict[indicator]['plotItem'].plot()
             self.allPlotsDict[indicator]['plotDataItem'] = dataPlotItem
+            self.allPlotsDict[indicator]['plotItem'].setTitle(indicator)
 
     def toggle_plot(self, indicator, caller=None):
         if caller.checkState() == 2:

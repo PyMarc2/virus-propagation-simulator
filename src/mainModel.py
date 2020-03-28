@@ -17,8 +17,8 @@ class MainModel(QObject):
         super(MainModel, self).__init__()
         self._simulatorObject = VirusSimulator()
         self._initialInfected = 1
-        self._populationSize = 1000
-        self._simulationTime = 40
+        self._populationSize = 10000
+        self._simulationTime = 60
         self._simulatorObject.load_json_parameters(self.defaultFilePath)
         self._loadedPopulationParameters = self._simulatorObject.parameters
         self.selectedIndicators = []
