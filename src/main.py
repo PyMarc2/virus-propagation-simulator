@@ -9,9 +9,10 @@ __status__ = "Production"
 
 from PyQt5.QtWidgets import QApplication, QSplashScreen
 from PyQt5.QtCore import Qt, QTimer, QSize
-from PyQt5.QtGui import QPixmap, QPainter, QMovie, QIcon
+from PyQt5.QtGui import QPixmap, QPainter, QMovie, QIcon, QFontDatabase
 from gui.windows.mainWindow import MainWindow
 from mainModel import MainModel
+from tools.cssThemes import CSSThemes
 from VirusSimulator import VirusSimulator
 from tools.threadWorker import Worker
 import sys
@@ -32,9 +33,9 @@ class App(QApplication):
         self.init_logging()
 
         self.setAttribute(Qt.AA_EnableHighDpiScaling)
+        QFontDatabase.addApplicationFont(os.path.dirname(os.path.realpath(__file__)) +'\\gui\\misc\\Open_Sans\\OpenSans-Light.ttf')
         self.setStyle("Fusion")
-        self.setStyleSheet("")
-
+        # self.setStyleSheet(CSSThemes().orange_theme())
         self.mainModel = MainModel()
         self.mainWindow = MainWindow(model=self.mainModel)
         self.mainWindow.setWindowTitle("py-virus-propagation-simulator")

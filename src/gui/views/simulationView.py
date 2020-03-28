@@ -30,6 +30,10 @@ class SimulationView(QWidget, Ui_simulationView):
         self.connect_signals()
         self.connect_checkbox()
         self.create_plots()
+        self.initialize_view()
+
+    def initialize_view(self):
+        self.cb_isInfected.setChecked(True)
 
     def connect_buttons(self):
         self.pb_simulate.clicked.connect(self.launch_simulation)
