@@ -33,7 +33,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tabWidget = QTabWidget()
         self.setCentralWidget(self.tabWidget)
         self.tabWidget.addTab(self.simulationView, "Simulation")
-        self.tabWidget.addTab(self.paramsView, "Parameters")
+        self.tabWidget.addTab(self.parametersView, "Parameters")
 
     def setup_menuBar(self):
         self.helpAction = QAction(self)
