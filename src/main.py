@@ -33,7 +33,7 @@ class App(QApplication):
         self.init_logging()
 
         self.setAttribute(Qt.AA_EnableHighDpiScaling)
-        QFontDatabase.addApplicationFont(os.path.dirname(os.path.realpath(__file__)) +'\\gui\\misc\\Open_Sans\\OpenSans-Light.ttf')
+        QFontDatabase.addApplicationFont(os.path.dirname(os.path.realpath(__file__)) +"\\gui\\misc\\Open_Sans\\OpenSans-Light.ttf")
         self.setStyle("Fusion")
         # self.setStyleSheet(CSSThemes().orange_theme())
         self.mainModel = MainModel()
@@ -55,9 +55,9 @@ class App(QApplication):
         logger.addHandler(handler)
 
         # create debug file handler in working directory
-        paramsViewUiPath = os.path.dirname(os.path.realpath(__file__)) + '\\paramsViewUi.ui'
+        paramsViewUiPath = os.path.dirname(os.path.realpath(__file__)) + "\\paramsViewUi.ui"
         handler = RotatingFileHandler(os.path.dirname(os.path.realpath(__file__)) + "\\log\\virus-propagation-simulator.log", maxBytes=2.3 * 1024 * 1024, backupCount=5)
-        handler.setLevel(logging.WARNING)
+        handler.setLevel(logging.ERROR)
         formatter = logging.Formatter("%(asctime)s\t\t (%(name)-25.25s) (thread:%(thread)d) (line:%(lineno)5d)\t\t[%(levelname)-5.5s] %(message)s")
         handler.setFormatter(formatter)
         logger.addHandler(handler)
@@ -73,12 +73,12 @@ class App(QApplication):
 
 def main():
     # Makes the icon in the taskbar as well.
-    appID = 'py-virus-propagation-simulator'  # arbitrary string
+    appID = "py-virus-propagation-simulator"  # arbitrary string
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(appID)
     app = App(sys.argv)
     app.setWindowIcon(QIcon(os.path.dirname(os.path.realpath(__file__)) + "\\img\\biohazard.png"))
     sys.exit(app.exec_())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

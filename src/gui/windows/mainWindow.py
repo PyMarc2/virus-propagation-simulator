@@ -1,5 +1,5 @@
 from gui.dialog.helpDialog import HelpDialog
-from gui.views.paramsView import ParamsView
+from gui.views.paramsView import ParametersView
 from gui.views.simulationView import SimulationView
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QVBoxLayout, QTabWidget, QAction
 from PyQt5.QtCore import Qt, pyqtSlot
@@ -46,7 +46,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def create_views_and_dialogs(self):
         self.helpDialog = HelpDialog()
-        self.paramsView = ParamsView(model=self.model)
+        self.parametersView = ParametersView(model=self.model)
         self.simulationView = SimulationView(model=self.model)
 
     def connect_buttons(self):

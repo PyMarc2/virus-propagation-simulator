@@ -4,8 +4,10 @@ from pyqtgraph import PlotItem
 from tools.threadWorker import Worker
 from pydispatch import dispatcher
 from tools.stoppableThread import QStoppableThread
+from tools.prettyPrint import pretty
 from Person import Person
 import os
+import json
 from PyQt5 import uic
 import logging
 import math
@@ -13,13 +15,13 @@ import threading
 
 log = logging.getLogger(__name__)
 
-simulationViewUiPath = os.path.dirname(os.path.realpath(__file__)) + '\\simulationViewUi.ui'
+simulationViewUiPath = os.path.dirname(os.path.realpath(__file__)) + "\\simulationViewUi.ui"
 Ui_simulationView, QtBaseClass = uic.loadUiType(simulationViewUiPath)
 
-SIGNAL_PLOT_TOGGLED = 'plot.toggled.indicator'
+SIGNAL_PLOT_TOGGLED = "plot.toggled.indicator"
 
 class SimulationView(QWidget, Ui_simulationView):
-    SIGNAL_toggled_plot_indicator = 'indicator'
+    SIGNAL_toggled_plot_indicator = "indicator"
 
     def __init__(self, model=None, controller=None):
         super(SimulationView, self).__init__()
@@ -54,21 +56,25 @@ class SimulationView(QWidget, Ui_simulationView):
 
     def create_plots(self):
         for indicator in Person().indicators:
-            self.allPlotsDict[indicator] = {'plotItem': PlotItem(), 'displayed': 0}
+            self.allPlotsDict[indicator] = {"plotItem": PlotItem(), "displayed": 0}
         for indicator in Person().indicators:
-            dataPlotItem = self.allPlotsDict[indicator]['plotItem'].plot()
-            self.allPlotsDict[indicator]['plotDataItem'] = dataPlotItem
-            self.allPlotsDict[indicator]['plotItem'].setTitle(indicator)
+            self.allPlotsDict[indicator]["plotDataItem"] = {}
+            for ageGroup in Person().ageGroupsList:
+                dataPlotItem = self.allPlotsDict[indicator]["plotItem"].plot()
+                self.allPlotsDict[indicator]["plotDataItem"][ageGroup] = dataPlotItem
+                # self.allPlotsDict[indicator]["plotDataItem"][ageGroup].setDownsampling()
+            self.allPlotsDict[indicator]["plotItem"].setTitle(indicator)
+        print(self.allPlotsDict)
 
     def toggle_plot(self, indicator, caller=None):
         if caller.checkState() == 2:
-            self.allPlotsDict[indicator]['displayed'] = 1
+            self.allPlotsDict[indicator]["displayed"] = 1
             self.update_plots_position()
-            dispatcher.send(signal=SIGNAL_PLOT_TOGGLED, sender=self, **{'indicator':indicator})
+            dispatcher.send(signal=SIGNAL_PLOT_TOGGLED, sender=self, **{"indicator":indicator})
 
         elif caller.checkState() == 0:
-            self.pyqtgraphWidget.removeItem(self.allPlotsDict['{}'.format(indicator)]['plotItem'])
-            self.allPlotsDict[indicator]['displayed'] = 0
+            self.pyqtgraphWidget.removeItem(self.allPlotsDict["{}".format(indicator)]["plotItem"])
+            self.allPlotsDict[indicator]["displayed"] = 0
             self.update_plots_position()
 
         else:
@@ -77,17 +83,18 @@ class SimulationView(QWidget, Ui_simulationView):
     def update_plots_position(self):
         self.pyqtgraphWidget.clear()
         sideLength = math.ceil(
-            math.sqrt(sum(self.allPlotsDict[ind]['displayed'] == 1 for ind in self.allPlotsDict.keys())))
-        tempPlotDict = {key : value for (key, value) in self.allPlotsDict.items() if value['displayed'] == 1}
+            math.sqrt(sum(self.allPlotsDict[ind]["displayed"] == 1 for ind in self.allPlotsDict.keys())))
+        tempPlotDict = {key : value for (key, value) in self.allPlotsDict.items() if value["displayed"] == 1}
         indicatorList = list(tempPlotDict.keys())
         listIndex = 0
         for i in range(sideLength):
             for j in range(sideLength):
                 try:
-                    self.pyqtgraphWidget.addItem(tempPlotDict[indicatorList[listIndex]]['plotItem'], i, j)
+                    self.pyqtgraphWidget.addItem(tempPlotDict[indicatorList[listIndex]]["plotItem"], i, j)
                     listIndex += 1
                 except:
                     pass
+
 
     @pyqtSlot(dict)
     def update_graph(self, simPlotData):
@@ -97,9 +104,10 @@ class SimulationView(QWidget, Ui_simulationView):
             for ageGroup in Person().ageGroupsList:
                 try:
                     kwargs = simPlotData[indicator][ageGroup]
-                    self.allPlotsDict[indicator]['plotDataItem'].setData(**kwargs)
+                    #print(ageGroup)
+                    self.allPlotsDict[indicator]["plotDataItem"][ageGroup].setData(**kwargs)
                 except:
-                    log.info('null')
+                    log.info("null")
 
     def unfold_plot_data(self, foldedData):
         unfoldedData = []

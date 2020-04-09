@@ -9,8 +9,8 @@ log = logging.getLogger(__name__)
 
 class MainModel(QObject):
     s_simulatorObject_changed = pyqtSignal(VirusSimulator)
-    defaultFilePath = os.path.dirname(os.path.realpath(__file__)) + r'\parameters_preset\default_parameters.json'
-    alternativePath = 'default_parameters.json'
+    defaultFilePath = os.path.dirname(os.path.realpath(__file__)) + r"\parameters_preset\default_parameters.json"
+    alternativePath = "default_parameters.json"
     print(defaultFilePath)
 
     def __init__(self):
@@ -22,6 +22,7 @@ class MainModel(QObject):
         self._simulatorObject.load_json_parameters(self.defaultFilePath)
         self._loadedPopulationParameters = self._simulatorObject.parameters
         self.selectedIndicators = []
+
 
     @property
     def simulatorObject(self):
