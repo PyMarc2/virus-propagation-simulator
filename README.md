@@ -8,6 +8,7 @@ For now, the parameter file is filled with proportion of the Quebec's population
 # NEW IN VERSION 0.3
 - Simulator is now at version 0.3.
 - README will be updated soon.
+![Demo GUI](doc/explication_2.gif)
 
 # NEW IN VERSION 0.2
 - Implementation in a live graphGUI! (But no parameter can be changed yet)
