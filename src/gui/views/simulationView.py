@@ -20,8 +20,16 @@ Ui_simulationView, QtBaseClass = uic.loadUiType(simulationViewUiPath)
 
 SIGNAL_PLOT_TOGGLED = "plot.toggled.indicator"
 
+
 class SimulationView(QWidget, Ui_simulationView):
     SIGNAL_toggled_plot_indicator = "indicator"
+
+    # TODO: Connect slidders to editTextBox to variable population/time/etc...
+    # TODO: By default set to ['ALL'] age group
+    # TODO: Possibility to BAR GRAPH PLOT
+    # TODO: Customizable graph parameters
+    # TODO: Toggle betwwen fitting mode and free simulation mode
+    # TODO: Code the Fitting Mode Backend ( REALLY HARD new branch for this)
 
     def __init__(self, model=None, controller=None):
         super(SimulationView, self).__init__()
@@ -49,6 +57,7 @@ class SimulationView(QWidget, Ui_simulationView):
         self.cb_isHospitalized.stateChanged.connect(
             lambda: self.toggle_plot("isHospitalized", caller=self.cb_isHospitalized))
         self.cb_hasSymptoms.stateChanged.connect(lambda: self.toggle_plot("hasSymptoms", caller=self.cb_hasSymptoms))
+        self.
 
     def connect_signals(self):
         log.info("Connecting simulationView Signals...")

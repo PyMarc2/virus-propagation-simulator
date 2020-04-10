@@ -33,7 +33,7 @@ font: 11pt &quot;OpenSans-Light&quot;;
     </widget>
    </item>
    <item row="0" column="0">
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="group_simulationParameters">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -51,7 +51,7 @@ font: 11pt &quot;OpenSans-Light&quot;;
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QRadioButton" name="radioButton">
+       <widget class="QRadioButton" name="rb_freeSimulation">
         <property name="text">
          <string>Free Simulation</string>
         </property>
@@ -61,52 +61,52 @@ font: 11pt &quot;OpenSans-Light&quot;;
        </widget>
       </item>
       <item>
-       <widget class="QWidget" name="widget" native="true">
+       <widget class="QWidget" name="group_basicParameters" native="true">
         <layout class="QGridLayout" name="gridLayout_2">
          <item row="3" column="0">
-          <widget class="QLabel" name="label_3">
+          <widget class="QLabel" name="la_simulationTime">
            <property name="text">
             <string>Simulation Time</string>
            </property>
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QSlider" name="horizontalSlider">
+          <widget class="QSlider" name="hs_nbOfInfected">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
          <item row="3" column="1">
-          <widget class="QSlider" name="horizontalSlider_3">
+          <widget class="QSlider" name="hs_simulationTime">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="la">
+          <widget class="QLabel" name="la_population">
            <property name="text">
             <string>Population: </string>
            </property>
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QSlider" name="horizontalSlider_2">
+          <widget class="QSlider" name="hs_population">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
          <item row="2" column="0">
-          <widget class="QLabel" name="label_2">
+          <widget class="QLabel" name="la_nbOfInfected">
            <property name="text">
             <string>Number Infected:</string>
            </property>
           </widget>
          </item>
          <item row="2" column="2">
-          <widget class="QLineEdit" name="lineEdit">
+          <widget class="QLineEdit" name="le_nbOfInfected">
            <property name="styleSheet">
             <string notr="true">background-color: rgba(0,0,0,0);
 corder-color: rgba(0,0,0,0);</string>
@@ -114,7 +114,7 @@ corder-color: rgba(0,0,0,0);</string>
           </widget>
          </item>
          <item row="1" column="2">
-          <widget class="QLineEdit" name="lineEdit_2">
+          <widget class="QLineEdit" name="le_population">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -128,7 +128,7 @@ corder-color: rgba(0,0,0,0);</string>
           </widget>
          </item>
          <item row="3" column="2">
-          <widget class="QLineEdit" name="lineEdit_3">
+          <widget class="QLineEdit" name="le_simulationTime">
            <property name="styleSheet">
             <string notr="true">background-color: rgba(0,0,0,0);
 corder-color: rgba(0,0,0,0);</string>
@@ -139,7 +139,7 @@ corder-color: rgba(0,0,0,0);</string>
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="groupBox_3">
+       <widget class="QGroupBox" name="group_tracers">
         <property name="title">
          <string>Display tracers</string>
         </property>
@@ -193,13 +193,13 @@ corder-color: rgba(0,0,0,0);</string>
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="groupBox_5">
+       <widget class="QGroupBox" name="group_separations">
         <property name="title">
          <string>Separation</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_7">
          <item row="0" column="0">
-          <widget class="QCheckBox" name="checkBox_7">
+          <widget class="QCheckBox" name="cb_separateByAge">
            <property name="text">
             <string>byAge</string>
            </property>
@@ -209,16 +209,16 @@ corder-color: rgba(0,0,0,0);</string>
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="groupBox_4">
+       <widget class="QGroupBox" name="group_graphType">
         <property name="title">
          <string>Graph type</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_5">
          <item row="0" column="0">
-          <widget class="QWidget" name="widget_2" native="true">
+          <widget class="QWidget" name="graphStyleWidget" native="true">
            <layout class="QGridLayout" name="gridLayout_6">
             <item row="0" column="0">
-             <widget class="QRadioButton" name="radioButton_3">
+             <widget class="QRadioButton" name="rb_lineGraph">
               <property name="text">
                <string>Lines</string>
               </property>
@@ -228,7 +228,7 @@ corder-color: rgba(0,0,0,0);</string>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QRadioButton" name="radioButton_4">
+             <widget class="QRadioButton" name="rb_barGraph">
               <property name="text">
                <string>Histogram</string>
               </property>
@@ -238,7 +238,7 @@ corder-color: rgba(0,0,0,0);</string>
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QWidget" name="widget_3" native="true">
+          <widget class="QWidget" name="group_multiGraphs" native="true">
            <layout class="QGridLayout" name="gridLayout_8">
             <item row="0" column="0">
              <widget class="QRadioButton" name="rb_allInOne">
@@ -288,14 +288,14 @@ corder-color: rgba(0,0,0,0);</string>
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="radioButton_2">
+       <widget class="QRadioButton" name="rb_fitSimulation">
         <property name="text">
          <string>Fitting Simulation</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="groupBox_2">
+       <widget class="QGroupBox" name="group_fittingParameters">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
           <horstretch>0</horstretch>
