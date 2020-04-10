@@ -147,3 +147,10 @@ class ParametersTableView(QWidget):
         self._table_model = value
         self.table_view.setModel(value)
 
+# TODO: update param value when selecting age
+# TODO: update param value in temp dict when editing param
+# TODO: save temp dict in new json when button Save As is clicked (GetOpenFileName)
+# TODO: Highlight row when param is selected
+# TODO: link slider to param in table
+# TODO: manage view and modal interaction (comprehension)
+# TODO: change initial json load and keep it modular (isn't hardcoded, will load all param in json)
