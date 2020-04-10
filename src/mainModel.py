@@ -45,7 +45,7 @@ class MainModel(QObject):
     @populationSize.setter
     def populationSize(self, value):
         self._populationSize = value
-        log.info("populationSize has been CHANGED")
+        log.debug("populationSize has been CHANGED")
 
     @property
     def simulationTime(self):
@@ -54,7 +54,7 @@ class MainModel(QObject):
     @simulationTime.setter
     def simulationTime(self, value):
         self._simulationTime = value
-        log.info("simulationTime has been CHANGED")
+        log.debug("simulationTime has been CHANGED")
 
     @property
     def initialInfected(self):
@@ -63,7 +63,7 @@ class MainModel(QObject):
     @initialInfected.setter
     def initialInfected(self, value):
         self._initialInfected = value
-        log.info("initialInfected has been CHANGED")
+        log.debug("initialInfected has been CHANGED")
 
     @property
     def loadedPopulationParameters(self):
@@ -72,7 +72,7 @@ class MainModel(QObject):
     @loadedPopulationParameters.setter
     def loadedPopulationParameters(self, value):
         self._loadedPopulationParameters = self._simulatorObject.load_json_parameters(value)
-        log.info("LoadedPopulationParameters has been CHANGED. Location is: {}".format(value))
+        log.debug("LoadedPopulationParameters has been CHANGED. Location is: {}".format(value))
 
     @property
     def selectedIndicators(self):
@@ -82,4 +82,4 @@ class MainModel(QObject):
     def selectedIndicators(self, value):
         self._selectedIndicators = value
         self._simulatorObject.selectedIndicators = value
-        log.info("selectedIndicators has been CHANGED")
+        log.debug("selectedIndicators has been CHANGED")

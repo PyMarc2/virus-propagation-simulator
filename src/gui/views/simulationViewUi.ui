@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>745</width>
-    <height>617</height>
+    <width>946</width>
+    <height>713</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,7 +22,7 @@ font: 11pt &quot;OpenSans-Light&quot;;
 </string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="1" rowspan="2">
+   <item row="0" column="1" rowspan="3">
     <widget class="GraphicsLayoutWidget" name="pyqtgraphWidget" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -35,7 +35,7 @@ font: 11pt &quot;OpenSans-Light&quot;;
    <item row="0" column="0">
     <widget class="QGroupBox" name="group_simulationParameters">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -58,226 +58,299 @@ font: 11pt &quot;OpenSans-Light&quot;;
         <property name="checked">
          <bool>true</bool>
         </property>
+        <attribute name="buttonGroup">
+         <string notr="true">buttonGroup</string>
+        </attribute>
        </widget>
       </item>
       <item>
-       <widget class="QWidget" name="group_basicParameters" native="true">
-        <layout class="QGridLayout" name="gridLayout_2">
-         <item row="3" column="0">
-          <widget class="QLabel" name="la_simulationTime">
-           <property name="text">
-            <string>Simulation Time</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QSlider" name="hs_nbOfInfected">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QSlider" name="hs_simulationTime">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="la_population">
-           <property name="text">
-            <string>Population: </string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QSlider" name="hs_population">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="la_nbOfInfected">
-           <property name="text">
-            <string>Number Infected:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="2">
-          <widget class="QLineEdit" name="le_nbOfInfected">
-           <property name="styleSheet">
-            <string notr="true">background-color: rgba(0,0,0,0);
-corder-color: rgba(0,0,0,0);</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="2">
-          <widget class="QLineEdit" name="le_population">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgba(0,0,0,0);
-corder-color: rgba(0,0,0,0);</string>
-           </property>
-           <property name="clearButtonEnabled">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="2">
-          <widget class="QLineEdit" name="le_simulationTime">
-           <property name="styleSheet">
-            <string notr="true">background-color: rgba(0,0,0,0);
-corder-color: rgba(0,0,0,0);</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="group_tracers">
-        <property name="title">
-         <string>Display tracers</string>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_4">
-         <item row="0" column="0">
-          <widget class="QCheckBox" name="cb_isInfected">
-           <property name="text">
-            <string>IsInfected</string>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QCheckBox" name="cb_isRecovered">
-           <property name="text">
-            <string> isRecovered</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QCheckBox" name="cb_isAlive">
-           <property name="text">
-            <string>isAlive</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QCheckBox" name="cb_isInfectious">
-           <property name="text">
-            <string>isInfectious</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QCheckBox" name="cb_hasSymptoms">
-           <property name="text">
-            <string>hasSymptoms</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QCheckBox" name="cb_isHospitalized">
-           <property name="text">
-            <string>isHospitalized</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="group_separations">
-        <property name="title">
-         <string>Separation</string>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_7">
-         <item row="0" column="0">
-          <widget class="QCheckBox" name="cb_separateByAge">
-           <property name="text">
-            <string>byAge</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="group_graphType">
-        <property name="title">
-         <string>Graph type</string>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_5">
-         <item row="0" column="0">
-          <widget class="QWidget" name="graphStyleWidget" native="true">
-           <layout class="QGridLayout" name="gridLayout_6">
-            <item row="0" column="0">
-             <widget class="QRadioButton" name="rb_lineGraph">
-              <property name="text">
-               <string>Lines</string>
+       <widget class="QWidget" name="freeSimulationWidget" native="true">
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QWidget" name="widget_2" native="true">
+           <layout class="QGridLayout" name="gridLayout_9">
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <item row="1" column="1">
+             <widget class="QSlider" name="hs_nbOfInfected">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>1</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
               </property>
-              <property name="checked">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLineEdit" name="le_nbOfInfected">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>80</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background-color: rgba(0,0,0,0);
+corder-color: rgba(0,0,0,0);</string>
+              </property>
+              <property name="text">
+               <string>0</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLineEdit" name="le_population">
+              <property name="enabled">
                <bool>true</bool>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>80</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background-color: rgba(0,0,0,0);
+corder-color: rgba(0,0,0,0);</string>
+              </property>
+              <property name="text">
+               <string>0</string>
+              </property>
+              <property name="clearButtonEnabled">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="la_nbOfInfected">
+              <property name="text">
+               <string>Number Infected:</string>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QRadioButton" name="rb_barGraph">
+             <widget class="QSlider" name="hs_population">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>1</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>200</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="la_population">
               <property name="text">
-               <string>Histogram</string>
+               <string>Population: </string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="la_simulationTime">
+              <property name="text">
+               <string>Simulation Time</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QSlider" name="hs_simulationTime">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>1</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QLineEdit" name="le_simulationTime">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>80</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background-color: rgba(0,0,0,0);
+corder-color: rgba(0,0,0,0);</string>
+              </property>
+              <property name="text">
+               <string>0</string>
               </property>
              </widget>
             </item>
            </layout>
           </widget>
          </item>
-         <item row="1" column="0">
-          <widget class="QWidget" name="group_multiGraphs" native="true">
-           <layout class="QGridLayout" name="gridLayout_8">
+         <item>
+          <widget class="QGroupBox" name="group_tracers">
+           <property name="title">
+            <string>Display tracers</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_4">
             <item row="0" column="0">
-             <widget class="QRadioButton" name="rb_allInOne">
+             <widget class="QCheckBox" name="cb_isInfected">
               <property name="text">
-               <string>All-in-one</string>
+               <string>IsInfected</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QCheckBox" name="cb_isRecovered">
+              <property name="text">
+               <string> isRecovered</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QCheckBox" name="cb_isAlive">
+              <property name="text">
+               <string>isAlive</string>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QRadioButton" name="rb_separated">
+             <widget class="QCheckBox" name="cb_isInfectious">
               <property name="text">
-               <string>Separated</string>
+               <string>isInfectious</string>
               </property>
-              <property name="checked">
-               <bool>true</bool>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QCheckBox" name="cb_hasSymptoms">
+              <property name="text">
+               <string>hasSymptoms</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QCheckBox" name="cb_isHospitalized">
+              <property name="text">
+               <string>isHospitalized</string>
               </property>
              </widget>
             </item>
            </layout>
           </widget>
          </item>
+         <item>
+          <widget class="QGroupBox" name="group_separations">
+           <property name="title">
+            <string>Separation</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_7">
+            <item row="0" column="0">
+             <widget class="QCheckBox" name="cb_separateByAge">
+              <property name="text">
+               <string>byAge</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="group_graphType">
+           <property name="title">
+            <string>Graph type</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_5">
+            <item row="0" column="0">
+             <widget class="QWidget" name="graphStyleWidget" native="true">
+              <layout class="QGridLayout" name="gridLayout_6">
+               <item row="0" column="0">
+                <widget class="QRadioButton" name="rb_lineGraph">
+                 <property name="text">
+                  <string>Lines</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QRadioButton" name="rb_barGraph">
+                 <property name="text">
+                  <string>Histogram</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QWidget" name="group_multiGraphs" native="true">
+              <layout class="QGridLayout" name="gridLayout_8">
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item row="0" column="0">
+                <widget class="QRadioButton" name="rb_allInOne">
+                 <property name="text">
+                  <string>All-in-one</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QRadioButton" name="rb_separated">
+                 <property name="text">
+                  <string>Separated</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
         </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pb_simulate">
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-        <property name="text">
-         <string>Simulate</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pb_reset">
-        <property name="text">
-         <string>Reset</string>
-        </property>
        </widget>
       </item>
       <item>
@@ -288,27 +361,77 @@ corder-color: rgba(0,0,0,0);</string>
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="rb_fitSimulation">
+       <widget class="QRadioButton" name="rb_fittingSimulation">
         <property name="text">
          <string>Fitting Simulation</string>
         </property>
+        <attribute name="buttonGroup">
+         <string notr="true">buttonGroup</string>
+        </attribute>
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="group_fittingParameters">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="title">
-         <string>Fitting parameters</string>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_3"/>
+       <widget class="QWidget" name="fittingSimulationWidget" native="true">
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QGroupBox" name="group_fittingSimulation">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="title">
+            <string>Fitting parameters</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="0" column="0">
+             <widget class="QPushButton" name="pushButton_2">
+              <property name="text">
+               <string>test</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox">
+           <property name="title">
+            <string>Optimizer</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="0" column="0">
+             <widget class="QPushButton" name="pushButton">
+              <property name="text">
+               <string>test</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QPushButton" name="pb_reset">
+     <property name="text">
+      <string>Reset</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QPushButton" name="pb_simulate">
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>Simulate</string>
+     </property>
     </widget>
    </item>
   </layout>
@@ -323,4 +446,7 @@ corder-color: rgba(0,0,0,0);</string>
  </customwidgets>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="buttonGroup"/>
+ </buttongroups>
 </ui>

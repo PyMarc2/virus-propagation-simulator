@@ -68,30 +68,30 @@ class VirusSimulator(QObject):
     def launch_propagation(self, nbOfDays):
         for d in range(nbOfDays):
             self.day = d
-            log.info("Simulation Day: {} on {} ({}%)".format(d, nbOfDays-1, d * 100 / nbOfDays-1))
+            log.info("Simulation Day: {} on {} ({:.2f}%)".format(d, nbOfDays-1, d * 100 / nbOfDays))
             self.meet_people()
-            log.info("DAY {} :: BEGIN SAVE STATUS".format(d))
+            log.debug("DAY {} :: BEGIN SAVE STATUS".format(d))
             self.save_status()
-            log.info("DAY {} :: END SAVE STATUS".format(d))
+            log.debug("DAY {} :: END SAVE STATUS".format(d))
             self.send_data_to_plot()
 
 
-        log.info("=== === === SIMULATION COMPLETE === === ===")
+        log.info("=== === === SIMULATION COMPLETE (100.00%) === === ===")
 
     def meet_people(self):
-        log.info("DAY {} :: BEGIN INDEXING".format(self.day))
+        log.debug("DAY {} :: BEGIN INDEXING".format(self.day))
         personListIndex = [i if x.indicators["isInfected"] == 1 else -1 for i, x in enumerate(self.population)]
         personListIndex = list(filter((-1).__ne__, personListIndex))
-        log.info("DAY {} :: END INDEXING".format(self.day))
+        log.debug("DAY {} :: END INDEXING".format(self.day))
 
-        log.info("DAY {} :: BEGIN MEETING PERSONS".format(self.day))
+        log.debug("DAY {} :: BEGIN MEETING PERSONS".format(self.day))
         liste = [self.population[i] for i in personListIndex]
         for person in liste:
             person.update_own_status()
             if person.indicators["isInfectious"]:
                 for metPerson in range(int(person.parameters["knownEncounteredPerDay"])):
                     person.interact(random.choice(person.listOfRelatives))
-        log.info("DAY {} :: END MEETING PERSONS".format(self.day))
+        log.debug("DAY {} :: END MEETING PERSONS".format(self.day))
 
     def save_status(self):
         """{"indicator":{"[0-9]":{"x":[], "y":[]}, "[10-19]":{"x"}:[], "y":[]}, ...}
@@ -118,17 +118,17 @@ class VirusSimulator(QObject):
 
         id = 0
         for i, key in enumerate(self.parameters.keys()):
-            for j in range(int(amountOfPeople * self.parameters[key]["percentageOfPopulation"])):
+            for j in range(int(amountOfPeople * self.parameters[key]["percentageOfPopulation"]["p1"])):
                 randomizedParameters = self.give_gaussian_parameters(self.parameters[key])
                 self.population.append(Person(randomizedParameters, tag=key, id=id))
                 id += 1
-            log.info("Creating Population...{}/{}".format(i, len(self.parameters.keys())))
+            log.debug("Creating Population...{}/{}".format(i, len(self.parameters.keys())))
         random.shuffle(self.population)
-        log.info("Done.")
-        log.info("Randomizing Relationships...")
+        log.debug("Done.")
+        log.debug("Randomizing Relationships...")
         for person in self.population:
             person.select_relatives(self.population, 50)
-        log.info("Done.")
+        log.debug("Done.")
         return self.population
 
     def load_json_parameters(self, jsonFilePath):
@@ -151,11 +151,11 @@ class VirusSimulator(QObject):
         parameters.pop("percentageOfPopulation", None)
 
         for parameter in parameters:
-            randomizedParameters[parameter] = np.random.normal(loc=parameters[parameter]["mean"],
-                                                               scale=parameters[parameter]["sd"])
+            randomizedParameters[parameter] = np.random.normal(loc=parameters[parameter]["p1"],
+                                                               scale=parameters[parameter]["p2"])
 
         return randomizedParameters
 
     def handle_plot_toggled(self, sender, **kwargs):
-        log.info("Handled a plot toggle")
+        log.debug("Handled a plot toggle")
         self.selectedIndicators.append(kwargs["indicator"])

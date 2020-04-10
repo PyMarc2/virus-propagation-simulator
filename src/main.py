@@ -49,7 +49,7 @@ class App(QApplication):
 
         # create console handler
         handler = logging.StreamHandler()
-        handler.setLevel(logging.NOTSET)
+        handler.setLevel(logging.INFO)
         formatter = logging.Formatter("%(asctime)s\t\t (%(name)-15.15s) (thread:%(thread)d) (line:%(lineno)5d)\t\t[%(levelname)-5.5s] %(message)s")
         handler.setFormatter(formatter)
         logger.addHandler(handler)

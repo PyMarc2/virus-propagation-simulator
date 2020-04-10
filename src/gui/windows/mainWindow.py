@@ -56,6 +56,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.helpDialog.s_windowClose.connect(lambda: self.setEnabled(True))
 
     def show_helpDialog(self):
-        log.info('Help Dialog Opened')
+        log.debug('Help Dialog Opened')
         self.setEnabled(False)
         self.helpDialog.exec_()
