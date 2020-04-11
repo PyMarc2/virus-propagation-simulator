@@ -2,7 +2,7 @@
 from PyQt5.QtCore import Qt, QAbstractTableModel, QObject
 import json
 from PyQt5.QtWidgets import QTableView, QSizePolicy, QHeaderView, QWidget, QItemDelegate, QPushButton, QAbstractItemView, QComboBox
-from PyQt5.QtCore import pyqtSignal, pyqtSlot
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, QModelIndex, QAbstractItemModel
 from PyQt5 import QtCore
 from PyQt5.QtGui import QPixmap, QIcon
 from tools.qtableTools import ComboDelegate, ButtonDelegate
@@ -17,7 +17,7 @@ class ParametersTableModel(QAbstractTableModel):
     def __init__(self):
         super(ParametersTableModel, self).__init__()
         self.headerText = ["ageGroup", "Parameter name", "Param 1", "Param 2"]
-        self.data = [["", "", "", ""]]
+        self.data = []
 
     def rowCount(self, parent=None):
         return len(self.data)
@@ -37,18 +37,17 @@ class ParametersTableModel(QAbstractTableModel):
     def flags(self, index):
         if not index.isValid():
             return None
-        return Qt.ItemIsEnabled | Qt.ItemIsEditable
+        else:
+            if index.column() == 1:
+                return Qt.ItemIsEnabled | Qt.ItemIsSelectable
+            else:
+                return Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsEditable
 
     def setData(self, index, value, role):
-        if role == Qt.EditRole:
+        if role == Qt.EditRole or role == Qt.DisplayRole:
             self.data[index.row()][index.column()] = value
             self.dataChanged.emit(index, index)
             return True
-        elif role == Qt.DisplayRole:
-            self.data[index.row()][index.column()] = value
-            self.dataChanged.emit(index, index)
-        #     print("hello")
-        #     return True
 
     def update(self, dataIn):
         self.data = dataIn
@@ -57,7 +56,6 @@ class ParametersTableModel(QAbstractTableModel):
 
 
 class ParametersTableView(QWidget):
-
     def __init__(self, parent, table_model):
         super(ParametersTableView, self).__init__()
         self.table_view = QTableView(parent)
@@ -83,8 +81,7 @@ class ParametersTableView(QWidget):
         self.table_view.setAlternatingRowColors(True)
         self.table_view.setSizePolicy(QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum))
 
-        self.table_view.setEditTriggers(QAbstractItemView.NoEditTriggers |
-                             QAbstractItemView.AllEditTriggers)
+        self.table_view.setEditTriggers(QAbstractItemView.DoubleClicked)
 
         self.table_view.setSortingEnabled(False)
         self.table_view.verticalHeader().highlightSections()
@@ -94,13 +91,9 @@ class ParametersTableView(QWidget):
         self.table_view.setColumnWidth(2, 120)
         self.table_view.setColumnWidth(3, 120)
 
-        # self.table_view.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
         self.table_view.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
         self.table_view.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
         self.table_view.horizontalHeader().setSectionResizeMode(3, QHeaderView.Stretch)
-        # self.table_view.horizontalHeader().setSectionResizeMode(4, QHeaderView.Stretch)
-        # self.table_view.horizontalHeader().setSectionResizeMode(5, QHeaderView.Stretch)
-        # self.table_view.horizontalHeader().setSectionResizeMode(6, QHeaderView.Stretch)
 
         sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(1)
@@ -136,21 +129,31 @@ class ParametersTableView(QWidget):
         self.table_model.update(actualData)
 
     def insert_unity_delegate(self):
-        self.comboBox = ComboDelegate(self.table_view, ["ALL", "[0-9]", "[10-9]", "[10-19]", "[20-29]", "[30-39]", "[40-49]", "[50-59]", "[60-69]", "[70-79]", "[80-89]", "[90-99]"], self.table_model)
-        self.table_view.setItemDelegateForColumn(self.table_model.columnCount() - 4, self.comboBox)
+        ageGroup = ["ALL", "[0-9]", "[10-9]", "[10-19]", "[20-29]", "[30-39]", "[40-49]",
+                    "[50-59]", "[60-69]", "[70-79]", "[80-89]", "[90-99]"]
+        comboBox = ComboDelegate(self.table_view, ageGroup, self.table_model)
+        self.table_view.setItemDelegateForColumn(0, comboBox)
 
     @property
     def table_model(self):
         return self._table_model
+
     @table_model.setter
     def table_model(self, value):
         self._table_model = value
         self.table_view.setModel(value)
 
+    def initialize_combo_delegate(self):
+        for i in range(self.table_model.rowCount()):
+            modalIndex = QModelIndex()
+            modalIndex.row = i
+            modalIndex.column = 0
+            self.table_view.doubleClicked.emit(modalIndex)
+
+
 # TODO: update param value when selecting age
-# TODO: update param value in temp dict when editing param
-# TODO: save temp dict in new json when button Save As is clicked (GetOpenFileName)
-# TODO: Highlight row when param is selected
 # TODO: link slider to param in table
 # TODO: manage view and modal interaction (comprehension)
 # TODO: change initial json load and keep it modular (isn't hardcoded, will load all param in json)
+# TODO: optimize ComboDelegate
+# TODO: Set all combo box value default to ALL
