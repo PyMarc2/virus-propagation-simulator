@@ -62,20 +62,18 @@ class ParametersTableView(QWidget):
         self.table_model = table_model
         self.table_view.setModel(self.table_model)
         self.setup_table_visuals()
+        self.table_view.clicked.connect(self.get_selected_index_on_click)
 
-    def load_json(self, path):
-        with open(path, 'r') as f:
-            jsonData = json.load(f)[0]
-            print(jsonData)
-            for parameter in jsonData['[all]'].keys():
-                a = [""]
-                a.append(parameter)
-                for i in range(2):
-                    try:
-                        a.append(jsonData['[all]'][parameter]["p{}".format(i+1)])
-                    except Exception:
-                        a.append("")
-                self.add_data_row(a)
+    def load_data(self, jsonData):
+        for parameter in jsonData['[all]'].keys():
+            a = [""]
+            a.append(parameter)
+            for i in range(2):
+                try:
+                    a.append(jsonData['[all]'][parameter]["p{}".format(i+1)])
+                except Exception:
+                    a.append("")
+            self.add_data_row(a)
 
     def setup_table_visuals(self):
         self.table_view.setAlternatingRowColors(True)
@@ -129,10 +127,11 @@ class ParametersTableView(QWidget):
         self.table_model.update(actualData)
 
     def insert_unity_delegate(self):
-        ageGroup = ["ALL", "[0-9]", "[10-9]", "[10-19]", "[20-29]", "[30-39]", "[40-49]",
+        ageGroup = ["[all]", "[0-9]", "[10-19]", "[20-29]", "[30-39]", "[40-49]",
                     "[50-59]", "[60-69]", "[70-79]", "[80-89]", "[90-99]"]
         comboBox = ComboDelegate(self.table_view, ageGroup, self.table_model)
         self.table_view.setItemDelegateForColumn(0, comboBox)
+        self.initialize_combo_delegate()
 
     @property
     def table_model(self):
@@ -144,14 +143,16 @@ class ParametersTableView(QWidget):
         self.table_view.setModel(value)
 
     def initialize_combo_delegate(self):
+        index = self.table_model.data
         for i in range(self.table_model.rowCount()):
-            modalIndex = QModelIndex()
-            modalIndex.row = i
-            modalIndex.column = 0
+            modalIndex = index.sibling(index.row(), 0)
             self.table_view.doubleClicked.emit(modalIndex)
 
+    def get_selected_index_on_click(self):
+        self.parent.selected_item_index = self.table_view.selectionModel().currentIndex()
+        self.parent.set_radio_button_value()
 
-# TODO: update param value when selecting age
+
 # TODO: link slider to param in table
 # TODO: manage view and modal interaction (comprehension)
 # TODO: change initial json load and keep it modular (isn't hardcoded, will load all param in json)

@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QFileDialog, QMessageBox
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, QModelIndex
+from PyQt5.QtCore import pyqtSlot, pyqtSignal, QModelIndex, Qt, QAbstractItemModel
 from gui.widgets.parametersTableWidget import ParametersTableModel
 from gui.widgets.parametersTableWidget import ParametersTableView
 import os
@@ -20,10 +20,11 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
         super(ParametersView, self).__init__()
         self.setupUi(self)
         self.model = model
-        self.setup_table()
+        self.selected_item_index: QModelIndex
         with open(self.model.defaultFilePath, 'r') as fp:
             dictParameters = json.load(fp)
             self.temporaryParametersDict = dictParameters[0]
+        self.setup_table()
 
     def setup_table(self):
         self.tableModel = ParametersTableModel()
@@ -32,26 +33,69 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
         self.tableWidgetLayout = QVBoxLayout()
         self.tableWidgetLayout.addWidget(self.tableView.table_view)
         self.tableWidget.setLayout(self.tableWidgetLayout)
-        self.tableView.load_json(self.model.defaultFilePath)
+        self.tableView.load_data(self.temporaryParametersDict)
         self.pb_save.clicked.connect(self.save_parameters)
-        self.tableModel.dataChanged.connect(self.update_temporary_dict)
+        self.tableModel.dataChanged.connect(self.update_data)
+        self.rb_binomial.clicked.connect(self.update_distribution_type_in_dict)
+        self.rb_normal.clicked.connect(self.update_distribution_type_in_dict)
+        self.rb_gamma.clicked.connect(self.update_distribution_type_in_dict)
 
     def udpate_graph(self):
         pass
 
     @pyqtSlot(QModelIndex)
-    def update_temporary_dict(self, value):
-        ageGroup = self.tableModel.data[value.row()][0]
+    def update_data(self, index):
         try:
-            parametersName = self.tableModel.data[value.row()][1]
-            parametersValue1 = self.tableModel.data[value.row()][2]
-            parametersValue2 = self.tableModel.data[value.row()][3]
-            self.temporaryParametersDict[ageGroup][parametersName]['p1'] = parametersValue1
-            self.temporaryParametersDict[ageGroup][parametersName]['p2'] = parametersValue2
-        except KeyError:
-            msgBox = QMessageBox()
-            msgBox.setText('Age group is undefined')
-            msgBox.exec_()
+            if index.column() == 0:
+                self.update_data_from_dict(index)
+            else:
+                self.update_dict_from_data(index)
+        except Exception as E:
+            log.error(E)
+
+    def update_data_from_dict(self, index):
+        ageGroup = self.tableModel.data[index.row()][0]
+        parametersName = self.tableModel.data[index.row()][1]
+        parametersindex1 = self.temporaryParametersDict[ageGroup][parametersName]['p1']
+        parametersindex2 = self.temporaryParametersDict[ageGroup][parametersName]['p2']
+
+        self.tableModel.setData(index.sibling(index.row(), 2), parametersindex1, Qt.EditRole)
+        self.tableModel.setData(index.sibling(index.row(), 3), parametersindex2, Qt.EditRole)
+
+    def update_dict_from_data(self, index):
+        ageGroup = self.tableModel.data[index.row()][0]
+        parametersName = self.tableModel.data[index.row()][1]
+        parametersindex1 = self.tableModel.data[index.row()][2]
+        parametersindex2 = self.tableModel.data[index.row()][3]
+        self.temporaryParametersDict[ageGroup][parametersName]['p1'] = parametersindex1
+        self.temporaryParametersDict[ageGroup][parametersName]['p2'] = parametersindex2
+
+    def update_distribution_type_in_dict(self):
+        try:
+            ageGroup = self.selected_item_index.sibling(self.selected_item_index.row(), 0)
+            parameter = self.selected_item_index.sibling(self.selected_item_index.column(), 1)
+            if self.rb_binomial.isChecked():
+                print(self.rb_binomial.text())
+                # self.temporaryParametersDict[ageGroup][parameter]['distributionType'] = self.rb_binomial.text()
+            elif self.rb_normal.isChecked():
+                print(self.rb_normal.text())
+                # self.temporaryParametersDict[ageGroup][parameter]['distributionType'] = self.rb_bionomial.text()
+            elif self.rb_gamma.isChecked():
+                print(self.rb_gamma.text())
+                # self.temporaryParametersDict[ageGroup][parameter]['distributionType'] = self.rb_bionomial.text()
+        except Exception as E:
+            log.error(E)
+
+    def set_radio_button_value(self):
+        try:
+            ageGroup = self.selected_item_index.sibling(self.selected_item_index.row(), 0)
+            parameter = self.selected_item_index.sibling(self.selected_item_index.column(), 1)
+            distributionType = self.temporaryParametersDict[ageGroup][parameter]['distributionType']
+            if distributionType == 'Normal':
+                pass
+
+        except Exception as E:
+            log.error(E)
 
     def save_parameters(self):
         defaultSimulationParametersJsonFilename = time.strftime("simulationParameters_%Y-%m-%d_%Hh%Mm%Ss.json")
