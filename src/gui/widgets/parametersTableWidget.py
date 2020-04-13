@@ -58,7 +58,8 @@ class ParametersTableModel(QAbstractTableModel):
 class ParametersTableView(QWidget):
     def __init__(self, parent, table_model):
         super(ParametersTableView, self).__init__()
-        self.table_view = QTableView(parent)
+        self.parent = parent
+        self.table_view = QTableView(self.parent)
         self.table_model = table_model
         self.table_view.setModel(self.table_model)
         self.setup_table_visuals()
@@ -131,7 +132,6 @@ class ParametersTableView(QWidget):
                     "[50-59]", "[60-69]", "[70-79]", "[80-89]", "[90-99]"]
         comboBox = ComboDelegate(self.table_view, ageGroup, self.table_model)
         self.table_view.setItemDelegateForColumn(0, comboBox)
-        self.initialize_combo_delegate()
 
     @property
     def table_model(self):
@@ -141,12 +141,6 @@ class ParametersTableView(QWidget):
     def table_model(self, value):
         self._table_model = value
         self.table_view.setModel(value)
-
-    def initialize_combo_delegate(self):
-        index = self.table_model.data
-        for i in range(self.table_model.rowCount()):
-            modalIndex = index.sibling(index.row(), 0)
-            self.table_view.doubleClicked.emit(modalIndex)
 
     def get_selected_index_on_click(self):
         self.parent.selected_item_index = self.table_view.selectionModel().currentIndex()

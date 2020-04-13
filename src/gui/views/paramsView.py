@@ -20,7 +20,7 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
         super(ParametersView, self).__init__()
         self.setupUi(self)
         self.model = model
-        self.selected_item_index: QModelIndex
+        self.selected_item_index = None
         with open(self.model.defaultFilePath, 'r') as fp:
             dictParameters = json.load(fp)
             self.temporaryParametersDict = dictParameters[0]
@@ -34,6 +34,8 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
         self.tableWidgetLayout.addWidget(self.tableView.table_view)
         self.tableWidget.setLayout(self.tableWidgetLayout)
         self.tableView.load_data(self.temporaryParametersDict)
+        for i in range(0, self.tableModel.rowCount()):
+            self.tableView.table_view.openPersistentEditor(self.tableModel.index(i, 0))
         self.pb_save.clicked.connect(self.save_parameters)
         self.tableModel.dataChanged.connect(self.update_data)
         self.rb_binomial.clicked.connect(self.update_distribution_type_in_dict)
@@ -58,7 +60,6 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
         parametersName = self.tableModel.data[index.row()][1]
         parametersindex1 = self.temporaryParametersDict[ageGroup][parametersName]['p1']
         parametersindex2 = self.temporaryParametersDict[ageGroup][parametersName]['p2']
-
         self.tableModel.setData(index.sibling(index.row(), 2), parametersindex1, Qt.EditRole)
         self.tableModel.setData(index.sibling(index.row(), 3), parametersindex2, Qt.EditRole)
 
@@ -72,28 +73,28 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
 
     def update_distribution_type_in_dict(self):
         try:
-            ageGroup = self.selected_item_index.sibling(self.selected_item_index.row(), 0)
-            parameter = self.selected_item_index.sibling(self.selected_item_index.column(), 1)
+            ageGroup = self.tableModel.data[self.selected_item_index.row()][0]
+            parameter = self.tableModel.data[self.selected_item_index.row()][1]
             if self.rb_binomial.isChecked():
-                print(self.rb_binomial.text())
-                # self.temporaryParametersDict[ageGroup][parameter]['distributionType'] = self.rb_binomial.text()
+                self.temporaryParametersDict[ageGroup][parameter]['distributionType'] = self.rb_binomial.text()
             elif self.rb_normal.isChecked():
-                print(self.rb_normal.text())
-                # self.temporaryParametersDict[ageGroup][parameter]['distributionType'] = self.rb_bionomial.text()
+                self.temporaryParametersDict[ageGroup][parameter]['distributionType'] = self.rb_normal.text()
             elif self.rb_gamma.isChecked():
-                print(self.rb_gamma.text())
-                # self.temporaryParametersDict[ageGroup][parameter]['distributionType'] = self.rb_bionomial.text()
+                self.temporaryParametersDict[ageGroup][parameter]['distributionType'] = self.rb_gamma.text()
         except Exception as E:
             log.error(E)
 
     def set_radio_button_value(self):
         try:
-            ageGroup = self.selected_item_index.sibling(self.selected_item_index.row(), 0)
-            parameter = self.selected_item_index.sibling(self.selected_item_index.column(), 1)
+            ageGroup = self.tableModel.data[self.selected_item_index.row()][0]
+            parameter = self.tableModel.data[self.selected_item_index.row()][1]
             distributionType = self.temporaryParametersDict[ageGroup][parameter]['distributionType']
             if distributionType == 'Normal':
-                pass
-
+                self.rb_normal.setChecked(True)
+            elif distributionType == 'Binomial':
+                self.rb_binomial.setChecked(True)
+            elif distributionType == 'Gamma':
+                self.rb_gamma.setChecked(True)
         except Exception as E:
             log.error(E)
 

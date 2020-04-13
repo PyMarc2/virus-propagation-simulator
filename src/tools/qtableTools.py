@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QTableView, QSizePolicy, QHeaderView, QWidget, QItemDelegate, QPushButton, QAbstractItemView, QComboBox
+from PyQt5.QtWidgets import QTableView, QSizePolicy, QHeaderView, QWidget, QItemDelegate, QPushButton, QAbstractItemView, QComboBox, QApplication, QStyle, QStyleOptionComboBox
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5 import QtCore, Qt
 from PyQt5.QtGui import QPixmap, QIcon
@@ -172,25 +172,12 @@ class ComboDelegate(QItemDelegate):
         self.tableModel = model
         self.oldData = ""
 
-    # def paint(self, painter, option, index):
-    #     super(ComboDelegate, self).paint(painter, option, index)
-    #     if not self.parent().indexWidget(index):
-    #         self.combo = QComboBox(self.parent())
-    #         self.combo.addItems(self.items)
-    #         self.combo.setCurrentText(self.tableModel.data[index.row()][index.column()])
-    #         print("\nCREATING:\n" + self.combo.currentText() + "\n")
-    #
-    #         self.setData(index, self.combo.currentText(), Qt.DisplayRole)
-    #         self.parent().setIndexWidget(index, self.combo)
-    #     else:
-    #         print("\nHOLDING:\n" + self.combo.currentText() + "\n" + "ROW:" + index.row() + "\n" + "COL:" + index.column())
-    #         self.setData(index, self.combo.currentText(), Qt.DisplayRole)
-
     def createEditor(self, parent, options, index):
         self.combo = QComboBox(parent)
         self.combo.addItems(self.items)
         self.combo.setEditable(True)
-
+        self.combo.setCurrentIndex(0)
+        self.combo.currentData(QtCore.Qt.DisplayRole)
         self.combo.lineEdit().setReadOnly(True)
         self.combo.currentIndexChanged.connect(self.currentIndexChanged)
         return self.combo
