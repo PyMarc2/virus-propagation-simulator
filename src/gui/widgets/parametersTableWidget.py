@@ -150,5 +150,4 @@ class ParametersTableView(QWidget):
 # TODO: link slider to param in table
 # TODO: manage view and modal interaction (comprehension)
 # TODO: change initial json load and keep it modular (isn't hardcoded, will load all param in json)
-# TODO: optimize ComboDelegate
-# TODO: Set all combo box value default to ALL
+# TODO: graph

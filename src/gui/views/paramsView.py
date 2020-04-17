@@ -3,7 +3,7 @@ from PyQt5.QtCore import pyqtSlot, pyqtSignal, QModelIndex, Qt, QAbstractItemMod
 from gui.widgets.parametersTableWidget import ParametersTableModel
 from gui.widgets.parametersTableWidget import ParametersTableView
 import os
-from PyQt5 import uic
+from PyQt5 import uic, QtCore
 import logging
 import json
 import time
@@ -34,7 +34,12 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
         self.tableWidgetLayout.addWidget(self.tableView.table_view)
         self.tableWidget.setLayout(self.tableWidgetLayout)
         self.tableView.load_data(self.temporaryParametersDict)
-        for i in range(0, self.tableModel.rowCount()):
+        for row in range(self.tableModel.rowCount()):
+            col = 0
+            index = self.tableModel.index(row, col, QtCore.QModelIndex())
+            value = '[all]'
+            self.tableModel.setData(index, value, QtCore.Qt.EditRole)
+        for i in range(self.tableModel.rowCount()):
             self.tableView.table_view.openPersistentEditor(self.tableModel.index(i, 0))
         self.pb_save.clicked.connect(self.save_parameters)
         self.tableModel.dataChanged.connect(self.update_data)
