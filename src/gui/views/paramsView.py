@@ -25,6 +25,7 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
             dictParameters = json.load(fp)
             self.temporaryParametersDict = dictParameters[0]
         self.setup_table()
+        self.connect_widgets()
 
     def setup_table(self):
         self.tableModel = ParametersTableModel()
@@ -41,13 +42,27 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
             self.tableModel.setData(index, value, QtCore.Qt.EditRole)
         for i in range(self.tableModel.rowCount()):
             self.tableView.table_view.openPersistentEditor(self.tableModel.index(i, 0))
+
+    def connect_widgets(self):
         self.pb_save.clicked.connect(self.save_parameters)
         self.tableModel.dataChanged.connect(self.update_data)
         self.rb_binomial.clicked.connect(self.update_distribution_type_in_dict)
         self.rb_normal.clicked.connect(self.update_distribution_type_in_dict)
         self.rb_gamma.clicked.connect(self.update_distribution_type_in_dict)
+        self.onSliderPress = 0
+        self.sl_mean.setMaximum(100)
+        self.sl_mean.setMinimum(0)
+        self.sl_mean.setSingleStep(1)
+        self.sl_sd.setMaximum(100)
+        self.sl_sd.setMinimum(0)
+        self.sl_sd.setSingleStep(1)
+        self.sl_mean.sliderMoved.connect(lambda: self.set_on_sl_press(True))
+        self.sl_mean.valueChanged.connect(lambda: self.update_slider_distribution_parameter(caller='sl'))
+        self.sl_sd.sliderMoved.connect(lambda: self.set_on_sl_press(True))
+        self.sl_sd.valueChanged.connect(lambda: self.update_slider_distribution_parameter(caller='sl'))
+        self.tableView.table_model.s_data_changed.connect(self.update_slider_distribution_parameter)
 
-    def udpate_graph(self):
+    def update_graph(self):
         pass
 
     @pyqtSlot(QModelIndex)
@@ -89,7 +104,7 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
         except Exception as E:
             log.error(E)
 
-    def set_radio_button_value(self):
+    def set_distribution_type_value(self):
         try:
             ageGroup = self.tableModel.data[self.selected_item_index.row()][0]
             parameter = self.tableModel.data[self.selected_item_index.row()][1]
@@ -102,6 +117,23 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
                 self.rb_gamma.setChecked(True)
         except Exception as E:
             log.error(E)
+
+    def update_slider_distribution_parameter(self, caller=None):
+        index = self.selected_item_index
+        if caller == 'sl':
+            if self.onSliderPress:
+                p1 = self.sl_mean.value()
+                p2 = self.sl_sd.value()
+                self.tableModel.setData(index.sibling(index.row(), 2), p1, Qt.EditRole)
+                self.tableModel.setData(index.sibling(index.row(), 3), p2, Qt.EditRole)
+                self.set_on_sl_press(False)
+        else:
+            if not self.onSliderPress:
+                self.sl_mean.setValue(self.tableModel.data[self.selected_item_index.row()][2])
+                self.sl_sd.setValue(self.tableModel.data[self.selected_item_index.row()][3])
+
+    def set_on_sl_press(self, value: bool):
+        self.onSliderPress = value
 
     def save_parameters(self):
         defaultSimulationParametersJsonFilename = time.strftime("simulationParameters_%Y-%m-%d_%Hh%Mm%Ss.json")
