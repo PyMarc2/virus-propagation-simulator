@@ -1,12 +1,15 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QFileDialog, QMessageBox
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QModelIndex, Qt, QAbstractItemModel
+from pyqtgraph import PlotItem, PlotDataItem
 from gui.widgets.parametersTableWidget import ParametersTableModel
 from gui.widgets.parametersTableWidget import ParametersTableView
-import os
 from PyQt5 import uic, QtCore
+from scipy.stats import norm, gamma, binom
+import numpy as np
 import logging
 import json
 import time
+import os
 
 log = logging.getLogger(__name__)
 
@@ -24,8 +27,10 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
         with open(self.model.defaultFilePath, 'r') as fp:
             dictParameters = json.load(fp)
             self.temporaryParametersDict = dictParameters[0]
+        self.plotDict = {}
         self.setup_table()
         self.connect_widgets()
+        self.create_plots()
 
     def setup_table(self):
         self.tableModel = ParametersTableModel()
@@ -62,8 +67,32 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
         self.sl_sd.valueChanged.connect(lambda: self.update_slider_distribution_parameter(caller='sl'))
         self.tableView.table_model.s_data_changed.connect(self.update_slider_distribution_parameter)
 
-    def update_graph(self):
-        pass
+    def create_plots(self):
+        self.plotDict["plotItem"] = PlotItem()
+        self.plotDict["plotDataItem"] = self.plotDict["plotItem"].plot()
+        self.pyqtgraphWidget.addItem(self.plotDict["plotItem"])
+
+    def update_graph(self, dataDict):
+        self.plotDict["plotDataItem"].setData(**dataDict)
+
+    def generate_graph_data(self):
+        ageGroup = self.tableModel.data[self.selected_item_index.row()][0]
+        parameter = self.tableModel.data[self.selected_item_index.row()][1]
+        p1 = self.temporaryParametersDict[ageGroup][parameter]["p1"]
+        p2 = self.temporaryParametersDict[ageGroup][parameter]["p2"]
+        distributionType = self.temporaryParametersDict[ageGroup][parameter]["distributionType"]
+        xyDict = {"x": [],
+                  "y": []}
+        if distributionType == 'Normal':
+            xyDict["x"] = list(np.linspace(p1-3*p2, p1+3*p2, 1000))
+            xyDict["y"] = list(norm.pdf(xyDict["x"], p1, p2))
+            self.update_graph(xyDict)
+        elif distributionType == 'Gamma':
+            xyDict["x"] = np.linspace(p2-p1, 3*p1+p2,1000)
+            xyDict["y"] = gamma.pdf(xyDict["x"], p1, p2)
+            self.update_graph(xyDict)
+        elif distributionType == 'Binomial':
+            pass
 
     @pyqtSlot(QModelIndex)
     def update_data(self, index):

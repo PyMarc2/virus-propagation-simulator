@@ -149,8 +149,8 @@ class ParametersTableView(QWidget):
         self.parent.selected_item_index = self.table_view.selectionModel().currentIndex()
         self.parent.set_distribution_type_value()
         self.parent.update_slider_distribution_parameter()
+        self.parent.generate_graph_data()
 
 
 # TODO: manage view and modal interaction (comprehension)
 # TODO: change initial json load and keep it modular (isn't hardcoded, will load all param in json)
-# TODO: graph
