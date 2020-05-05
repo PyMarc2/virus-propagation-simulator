@@ -1,10 +1,10 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QFileDialog, QMessageBox
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QModelIndex, Qt, QAbstractItemModel
-from pyqtgraph import PlotItem, PlotDataItem
+from pyqtgraph import PlotItem, BarGraphItem
 from gui.widgets.parametersTableWidget import ParametersTableModel
 from gui.widgets.parametersTableWidget import ParametersTableView
 from PyQt5 import uic, QtCore
-from scipy.stats import norm, gamma, binom
+from scipy.stats import binom, geom, dlaplace, logser, nbinom, poisson, planck, randint, zipf
 import numpy as np
 import logging
 import json
@@ -15,7 +15,6 @@ log = logging.getLogger(__name__)
 
 paramsViewUiPath = os.path.dirname(os.path.realpath(__file__)) + '\\paramsViewUi.ui'
 Ui_paramsView, QtBaseClass = uic.loadUiType(paramsViewUiPath)
-
 
 class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
 
@@ -52,8 +51,14 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
         self.pb_save.clicked.connect(self.save_parameters)
         self.tableModel.dataChanged.connect(self.update_data)
         self.rb_binomial.clicked.connect(self.update_distribution_type_in_dict)
-        self.rb_normal.clicked.connect(self.update_distribution_type_in_dict)
-        self.rb_gamma.clicked.connect(self.update_distribution_type_in_dict)
+        self.rb_geometric.clicked.connect(self.update_distribution_type_in_dict)
+        self.rb_laplacian.clicked.connect(self.update_distribution_type_in_dict)
+        self.rb_log.clicked.connect(self.update_distribution_type_in_dict)
+        self.rb_negbinomial.clicked.connect(self.update_distribution_type_in_dict)
+        self.rb_planck.clicked.connect(self.update_distribution_type_in_dict)
+        self.rb_poisson.clicked.connect(self.update_distribution_type_in_dict)
+        self.rb_uniform.clicked.connect(self.update_distribution_type_in_dict)
+        self.rb_zipf.clicked.connect(self.update_distribution_type_in_dict)
         self.onSliderPress = 0
         self.sl_mean.setMaximum(100)
         self.sl_mean.setMinimum(0)
@@ -69,30 +74,59 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
 
     def create_plots(self):
         self.plotDict["plotItem"] = PlotItem()
-        self.plotDict["plotDataItem"] = self.plotDict["plotItem"].plot()
+        # self.plotDict["plotDataItem"] = self.plotDict["plotItem"].plot()
         self.pyqtgraphWidget.addItem(self.plotDict["plotItem"])
+        self.plotDict["BarGraphItem"] = None
 
     def update_graph(self, dataDict):
-        self.plotDict["plotDataItem"].setData(**dataDict)
+        try:
+            # emptyDict = {
+            #     "x": [],
+            #     "y": []
+            # }
+            if self.plotDict["BarGraphItem"] is not None:
+                self.plotDict["plotItem"].removeItem(self.plotDict["BarGraphItem"])
+            # if distributionType is None:
+            #     self.plotDict["plotDataItem"].setData(**dataDict)
+            # else:
+            # self.plotDict["plotDataItem"].setData(**emptyDict)
+            self.plotDict["BarGraphItem"] = BarGraphItem(x=dataDict["x"], height=dataDict["y"], width=0.4, brush='r')
+            self.plotDict["plotItem"].addItem(self.plotDict["BarGraphItem"])
+        except Exception as E:
+            log.error(E)
 
     def generate_graph_data(self):
         ageGroup = self.tableModel.data[self.selected_item_index.row()][0]
         parameter = self.tableModel.data[self.selected_item_index.row()][1]
         p1 = self.temporaryParametersDict[ageGroup][parameter]["p1"]
         p2 = self.temporaryParametersDict[ageGroup][parameter]["p2"]
+
         distributionType = self.temporaryParametersDict[ageGroup][parameter]["distributionType"]
         xyDict = {"x": [],
                   "y": []}
-        if distributionType == 'Normal':
-            xyDict["x"] = list(np.linspace(p1-3*p2, p1+3*p2, 1000))
-            xyDict["y"] = list(norm.pdf(xyDict["x"], p1, p2))
+        try:
+            if distributionType == 'Binomial':
+                xyDict["x"] = np.arange(binom.ppf(0.01, int(p1), p2/100), binom.ppf(0.99, int(p1), p2/100))
+                xyDict["y"] = binom.pmf(xyDict["x"], int(p1), p2/100)
+            elif distributionType == 'Geometric':
+                pass
+            elif distributionType == 'Laplacian':
+                pass
+            elif distributionType == 'Logarithmic':
+                pass
+            elif distributionType == 'Neg. binomial':
+                pass
+            elif distributionType == 'Planck':
+                pass
+            elif distributionType == 'Poisson':
+                pass
+            elif distributionType == 'Uniform':
+                pass
+            elif distributionType == 'Zipf (Zeta)':
+                pass
             self.update_graph(xyDict)
-        elif distributionType == 'Gamma':
-            xyDict["x"] = np.linspace(p2-p1, 3*p1+p2,1000)
-            xyDict["y"] = gamma.pdf(xyDict["x"], p1, p2)
-            self.update_graph(xyDict)
-        elif distributionType == 'Binomial':
-            pass
+        except Exception as E:
+            log.error(E)
 
     @pyqtSlot(QModelIndex)
     def update_data(self, index):
@@ -111,6 +145,7 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
         parametersindex2 = self.temporaryParametersDict[ageGroup][parametersName]['p2']
         self.tableModel.setData(index.sibling(index.row(), 2), parametersindex1, Qt.EditRole)
         self.tableModel.setData(index.sibling(index.row(), 3), parametersindex2, Qt.EditRole)
+        self.generate_graph_data()
 
     def update_dict_from_data(self, index):
         ageGroup = self.tableModel.data[index.row()][0]
@@ -119,6 +154,7 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
         parametersindex2 = self.tableModel.data[index.row()][3]
         self.temporaryParametersDict[ageGroup][parametersName]['p1'] = parametersindex1
         self.temporaryParametersDict[ageGroup][parametersName]['p2'] = parametersindex2
+        self.generate_graph_data()
 
     def update_distribution_type_in_dict(self):
         try:
@@ -126,10 +162,24 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
             parameter = self.tableModel.data[self.selected_item_index.row()][1]
             if self.rb_binomial.isChecked():
                 self.temporaryParametersDict[ageGroup][parameter]['distributionType'] = self.rb_binomial.text()
-            elif self.rb_normal.isChecked():
-                self.temporaryParametersDict[ageGroup][parameter]['distributionType'] = self.rb_normal.text()
-            elif self.rb_gamma.isChecked():
-                self.temporaryParametersDict[ageGroup][parameter]['distributionType'] = self.rb_gamma.text()
+            elif self.rb_geometric.isChecked():
+                self.temporaryParametersDict[ageGroup][parameter]['distributionType'] = self.rb_geometric.text()
+            elif self.rb_laplacian.isChecked():
+                self.temporaryParametersDict[ageGroup][parameter]['distributionType'] = self.rb_laplacian.text()
+            elif self.rb_log.isChecked():
+                self.temporaryParametersDict[ageGroup][parameter]['distributionType'] = self.rb_log.text()
+            elif self.rb_negbinomial.isChecked():
+                self.temporaryParametersDict[ageGroup][parameter]['distributionType'] = self.rb_negbinomial.text()
+            elif self.rb_planck.isChecked():
+                self.temporaryParametersDict[ageGroup][parameter]['distributionType'] = self.rb_planck.text()
+            elif self.rb_poisson.isChecked():
+                self.temporaryParametersDict[ageGroup][parameter]['distributionType'] = self.rb_poisson.text()
+            elif self.rb_uniform.isChecked():
+                self.temporaryParametersDict[ageGroup][parameter]['distributionType'] = self.rb_uniform.text()
+            elif self.rb_zipf.isChecked():
+                self.temporaryParametersDict[ageGroup][parameter]['distributionType'] = self.rb_zipf.text()
+
+            self.generate_graph_data()
         except Exception as E:
             log.error(E)
 
@@ -138,12 +188,25 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
             ageGroup = self.tableModel.data[self.selected_item_index.row()][0]
             parameter = self.tableModel.data[self.selected_item_index.row()][1]
             distributionType = self.temporaryParametersDict[ageGroup][parameter]['distributionType']
-            if distributionType == 'Normal':
-                self.rb_normal.setChecked(True)
-            elif distributionType == 'Binomial':
+            if distributionType == 'Binomial':
                 self.rb_binomial.setChecked(True)
-            elif distributionType == 'Gamma':
-                self.rb_gamma.setChecked(True)
+            elif distributionType == 'Geometric':
+                self.rb_geometric.setChecked(True)
+            elif distributionType == 'Laplacian':
+                self.rb_laplacian.setChecked(True)
+            elif distributionType == 'Logarithmic':
+                self.rb_log.setChecked(True)
+            elif distributionType == 'Neg. binomial':
+                self.rb_negbinomial.setChecked(True)
+            elif distributionType == 'Planck':
+                self.rb_planck.setChecked(True)
+            elif distributionType == 'Poisson':
+                self.rb_poisson.setChecked(True)
+            elif distributionType == 'Uniform':
+                self.rb_uniform.setChecked(True)
+            elif distributionType == 'Zipf (Zeta)':
+                self.rb_zipf.setChecked(True)
+
         except Exception as E:
             log.error(E)
 
@@ -173,3 +236,4 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
                 json.dump(self.temporaryParametersDict, fp)
         except Exception as E:
             log.error(E)
+
