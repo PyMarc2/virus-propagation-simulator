@@ -109,21 +109,51 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
                 xyDict["x"] = np.arange(binom.ppf(0.01, int(p1), p2/100), binom.ppf(0.99, int(p1), p2/100))
                 xyDict["y"] = binom.pmf(xyDict["x"], int(p1), p2/100)
             elif distributionType == 'Geometric':
-                pass
+                xyDict["x"] = np.arange(geom.ppf(0.01, p1/100), geom.ppf(0.99, p1/100))
+                xyDict["y"] = geom.pmf(xyDict["x"], p1/100)
+                if p2 != 0:
+                    self.tableModel.setData(self.selected_item_index.sibling(self.selected_item_index.row(), 3), 0,
+                                            Qt.EditRole)
             elif distributionType == 'Laplacian':
-                pass
+                xyDict["x"] = np.arange(dlaplace.ppf(0.01, p1/100), dlaplace.ppf(0.99, p1/100))
+                xyDict["y"] = dlaplace.pmf(xyDict["x"], p1/100)
+                if p2 != 0:
+                    self.tableModel.setData(self.selected_item_index.sibling(self.selected_item_index.row(), 3), 0,
+                                            Qt.EditRole)
             elif distributionType == 'Logarithmic':
-                pass
+                xyDict["x"] = np.arange(logser.ppf(0.01, p1/100), logser.ppf(0.99, p1/100))
+                xyDict["y"] = logser.pmf(xyDict["x"], p1/100)
+                if p2 != 0:
+                    self.tableModel.setData(self.selected_item_index.sibling(self.selected_item_index.row(), 3), 0,
+                                            Qt.EditRole)
             elif distributionType == 'Neg. binomial':
-                pass
+                xyDict["x"] = np.arange(nbinom.ppf(0.01, p1, p2/100), nbinom.ppf(0.99, p1, p2/100))
+                xyDict["y"] = nbinom.pmf(xyDict["x"], p1, p2/100)
             elif distributionType == 'Planck':
-                pass
+                xyDict["x"] = np.arange(planck.ppf(0.01, p1/100), planck.ppf(0.99, p1/100))
+                xyDict["y"] = planck.pmf(xyDict["x"], p1/100)
+                if p2 != 0:
+                    self.tableModel.setData(self.selected_item_index.sibling(self.selected_item_index.row(), 3), 0,
+                                            Qt.EditRole)
             elif distributionType == 'Poisson':
-                pass
+                xyDict["x"] = np.arange(poisson.ppf(0.01, p1), poisson.ppf(0.99, p1))
+                xyDict["y"] = poisson.pmf(xyDict["x"], p1)
+                if p2 != 0:
+                    self.tableModel.setData(self.selected_item_index.sibling(self.selected_item_index.row(), 3), 0,
+                                            Qt.EditRole)
             elif distributionType == 'Uniform':
-                pass
+                if p1-0.5*p2 < 0:
+                    p2 = p1
+                min = p1-0.5*p2
+                max = p1+0.5*p2
+                xyDict["x"] = np.arange(randint.ppf(0.01, min, max), randint.ppf(0.99, min, max))
+                xyDict["y"] = randint.pmf(xyDict["x"], min, max)
             elif distributionType == 'Zipf (Zeta)':
-                pass
+                xyDict["x"] = np.arange(zipf.ppf(0.01, p1), zipf.ppf(0.99, p1))
+                xyDict["y"] = zipf.pmf(xyDict["x"], p1)
+                if p2 != 0:
+                    self.tableModel.setData(self.selected_item_index.sibling(self.selected_item_index.row(), 3), 0,
+                                            Qt.EditRole)
             self.update_graph(xyDict)
         except Exception as E:
             log.error(E)
@@ -210,7 +240,7 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
         except Exception as E:
             log.error(E)
 
-    def update_slider_distribution_parameter(self, caller=None):
+    def update_slider_distribution_parameter(self, caller=None, value=None):
         index = self.selected_item_index
         if caller == 'sl':
             if self.onSliderPress:
@@ -220,7 +250,7 @@ class ParametersView(QWidget, Ui_paramsView):  # type: QWidget
                 self.tableModel.setData(index.sibling(index.row(), 3), p2, Qt.EditRole)
                 self.set_on_sl_press(False)
         else:
-            if not self.onSliderPress:
+            if not self.onSliderPress and value is None:
                 self.sl_mean.setValue(self.tableModel.data[self.selected_item_index.row()][2])
                 self.sl_sd.setValue(self.tableModel.data[self.selected_item_index.row()][3])
 
