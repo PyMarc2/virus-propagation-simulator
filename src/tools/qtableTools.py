@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QTableView, QSizePolicy, QHeaderView, QWidget, QItemDelegate, QPushButton, QAbstractItemView, QComboBox
+from PyQt5.QtWidgets import QTableView, QSizePolicy, QHeaderView, QWidget, QItemDelegate, QPushButton, QAbstractItemView, QComboBox, QApplication, QStyle, QStyleOptionComboBox
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
-from PyQt5 import QtCore
+from PyQt5 import QtCore, Qt
 from PyQt5.QtGui import QPixmap, QIcon
 
 import os
@@ -119,40 +119,71 @@ class ButtonDelegate(QItemDelegate):
             self.was_clicked = False
 
     @pyqtSlot()
-    def cellButtonClicked(self):
+    def cellButtonClicked(self, index):
         self.was_clicked = True
         self.commitData.emit(self.sender())
 
+
+# class ComboDelegate(QItemDelegate):
+#
+#     def __init__(self, parent, items, model):
+#         super(ComboDelegate, self).__init__(parent)
+#         self.combo = None
+#         self.tableModel = model
+#         self.items = items
+#         self.oldData = ""
+#
+#     # def paint(self, painter, option, index):
+#     #     #super(ComboDelegate, self).paint(painter, option, index)
+#     #     if not self.parent().indexWidget(index):
+#     #         self.combo = QComboBox(self.parent())
+#     #         self.combo.addItems(self.items)
+#     #         self.combo.setCurrentText(self.tableModel.data[index.row()][index.column()])
+#     #         print("\nCREATING:\n" + self.combo.currentText() + "\n")
+#     #
+#     #         self.setData(index, self.combo.currentText(), Qt.DisplayRole)
+#     #         self.parent().setIndexWidget(index, self.combo)
+#     #     else:
+#     #         print("\nHOLDING:\n" + self.combo.currentText() + "\n" + "ROW:" + index.row() + "\n" + "COL:" + index.column())
+#     #         self.setData(index, self.combo.currentText(), Qt.DisplayRole)
+#
+#     def createEditor(self, parent, option, index):
+#         combo = QComboBox(parent)
+#         combo.addItems(self.items)
+#         combo.setEditable(True)
+#         combo.currentIndexChanged.connect(self.currentIndexChanged)
+#         return combo
+#
+#     @QtCore.pyqtSlot()
+#     def currentIndexChanged(self):
+#         self.commitData.emit(self.sender())
+#
+#     def setData(self, index, value, role=QtCore.Qt.DisplayRole):
+#         print("setData", index.row(), index.column(), value)
+#         self.tableModel.setData(index, value, role)
+#         print(self.tableModel.data)
 
 class ComboDelegate(QItemDelegate):
 
     def __init__(self, parent, items, model):
         super(ComboDelegate, self).__init__(parent)
         self.combo = None
-        self.tableModel = model
         self.items = items
+        self.tableModel = model
         self.oldData = ""
 
-    # def paint(self, painter, option, index):
-    #     #super(ComboDelegate, self).paint(painter, option, index)
-    #     if not self.parent().indexWidget(index):
-    #         self.combo = QComboBox(self.parent())
-    #         self.combo.addItems(self.items)
-    #         self.combo.setCurrentText(self.tableModel.data[index.row()][index.column()])
-    #         print("\nCREATING:\n" + self.combo.currentText() + "\n")
-    #
-    #         self.setData(index, self.combo.currentText(), Qt.DisplayRole)
-    #         self.parent().setIndexWidget(index, self.combo)
-    #     else:
-    #         print("\nHOLDING:\n" + self.combo.currentText() + "\n" + "ROW:" + index.row() + "\n" + "COL:" + index.column())
-    #         self.setData(index, self.combo.currentText(), Qt.DisplayRole)
+    def createEditor(self, parent, options, index):
+        self.combo = QComboBox(parent)
+        self.combo.addItems(self.items)
+        self.combo.setEditable(True)
+        self.combo.setCurrentIndex(0)
+        self.combo.currentData(QtCore.Qt.DisplayRole)
+        self.combo.lineEdit().setReadOnly(True)
+        self.combo.currentIndexChanged.connect(self.currentIndexChanged)
+        return self.combo
 
-    def createEditor(self, parent, option, index):
-        combo = QComboBox(parent)
-        combo.addItems(self.items)
-        combo.setEditable(True)
-        combo.currentIndexChanged.connect(self.currentIndexChanged)
-        return combo
+    def setModelData(self, editor, model, index):
+        model.setData(index, editor.currentText(), QtCore.Qt.DisplayRole)
 
     @QtCore.pyqtSlot()
     def currentIndexChanged(self):
@@ -162,4 +193,3 @@ class ComboDelegate(QItemDelegate):
         print("setData", index.row(), index.column(), value)
         self.tableModel.setData(index, value, role)
         print(self.tableModel.data)
-
